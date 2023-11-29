@@ -5,7 +5,7 @@ const siteMetadata = {
   title: 'fneira.dev',
   author: 'Fernando Neira',
   headerTitle: 'fneira.dev',
-  description: 'Blog sobre cosas que me interesan...',
+  description: '...',
   language: 'es-CL',
   theme: 'system', // system, dark or light
   siteUrl: 'https://fneira.dev',
@@ -27,7 +27,7 @@ const siteMetadata = {
     posthogProjectApiKey: '', // e.g. AhnJK8392ndPOav87as450xd
     googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
   },
-/*  newsletter: {
+  /*  newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus
     // Please add your .env file and modify it according to your selection
     provider: 'buttondown',

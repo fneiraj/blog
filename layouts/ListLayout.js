@@ -12,20 +12,14 @@ function Pagination({ totalPages, currentPage }) {
   return (
     <div className="space-y-2 pt-6 pb-8 md:space-y-5">
       <nav className="flex justify-between">
-        {!prevPage && (
-          <button className="cursor-auto disabled:opacity-50" disabled={!prevPage}>
-            Previous
-          </button>
-        )}
+        {!prevPage && <div></div>}
         {prevPage && (
-          <Link
-            href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
-          >
-            <button>Previous</button>
+          <Link href={currentPage - 1 === 1 ? `/` : `/${basePath}/pagina/${currentPage - 1}`}>
+            <button>Anterior</button>
           </Link>
         )}
         <span>
-          {currentPage} of {totalPages}
+          <b>{currentPage}</b> de <b>{totalPages}</b>
         </span>
         {!nextPage && (
           <button className="cursor-auto disabled:opacity-50" disabled={!nextPage}>
@@ -33,8 +27,8 @@ function Pagination({ totalPages, currentPage }) {
           </button>
         )}
         {nextPage && (
-          <Link href={`/${basePath}/page/${currentPage + 1}`}>
-            <button>Next</button>
+          <Link href={`/${basePath}/pagina/${currentPage + 1}`}>
+            <button>Siguiente</button>
           </Link>
         )}
       </nav>
@@ -60,10 +54,10 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
           </h1>
           <div className="relative max-w-lg">
             <input
-              aria-label="Search articles"
+              aria-label="Buscar articulos"
               type="text"
               onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Search articles"
+              placeholder="Buscar articulos"
               className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
             />
             <svg
@@ -83,7 +77,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
           </div>
         </div>
         <ul>
-          {!filteredBlogPosts.length && 'No posts found.'}
+          {!filteredBlogPosts.length && 'No se encontraron articulos.'}
           {displayPosts.map((post) => {
             const { path, date, title, summary, tags } = post
             return (
@@ -98,7 +92,10 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
                   <div className="space-y-3 xl:col-span-3">
                     <div>
                       <h3 className="text-2xl font-bold leading-8 tracking-tight">
-                        <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
+                        <Link
+                          href={`/${path.replace('blog/', '')}`}
+                          className="text-gray-900 dark:text-gray-100"
+                        >
                           {title}
                         </Link>
                       </h3>
