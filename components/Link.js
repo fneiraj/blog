@@ -5,7 +5,7 @@ const CustomLink = ({ href, ...rest }) => {
   const isAnchorLink = href && href.startsWith('#')
   if (isInternalLink) {
     return (
-      <Link href={href}>
+      <Link href={href.replace('blog/', '')}>
         <a {...rest} />
       </Link>
     )

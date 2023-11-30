@@ -12,8 +12,8 @@ const siteMetadata = {
   siteRepo: 'https://github.com/fneiraj/blog',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
-  socialBanner: '/static/images/twitter-card.png',
-  email: 'fe.neiraj@gmail.com',
+  socialBanner: '/static/images/logo.png',
+  email: 'hi@fneira.dev',
   github: 'https://github.com/fneiraj',
   linkedin: 'https://www.linkedin.com/in/fneiraj/',
   locale: 'es-CL',
@@ -60,20 +60,20 @@ const siteMetadata = {
       themeURL: '',
     },
   },
-  // search: {
-  //   provider: 'kbar', // kbar or algolia
-  //   kbarConfig: {
-  //     searchDocumentsPath: 'search.json', // path to load documents to search
-  //   },
-  //   provider: 'algolia',
-  //   algoliaConfig: {
-  //     // The application ID provided by Algolia
-  //     appId: 'R2IYF7ETH7',
-  //     // Public API key: it is safe to commit it
-  //     apiKey: '599cec31baffa4868cae4e79f180729b',
-  //     indexName: 'docsearch',
-  //   },
-  // },
+  //search: {
+  //  //   provider: 'kbar', // kbar or algolia
+  //  //   kbarConfig: {
+  //  //     searchDocumentsPath: 'search.json', // path to load documents to search
+  //  //   },
+  //  provider: 'algolia',
+  //  algoliaConfig: {
+  //    // The application ID provided by Algolia
+  //    appId: 'P5SCC1CBYG',
+  //    // Public API key: it is safe to commit it
+  //    apiKey: '9d3d8b330871fe7bd343fec2a81b1f69',
+  //    indexName: 'blog',
+  //  },
+  //},
 }
 
 module.exports = siteMetadata
