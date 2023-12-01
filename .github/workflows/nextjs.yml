@@ -24,7 +24,7 @@ jobs:
   # Build job
   build:
     name: Build Nextjs Blog
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -45,6 +45,10 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+      - name: Install yarn
+        run: corepack enable
+      - name: Yarn version
+        run: yarn --version
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -60,10 +64,6 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
-      - name: Install yarn
-        run: corepack enable
-      - name: Yarn version
-        run: yarn --version
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build project assets
