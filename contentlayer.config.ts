@@ -130,7 +130,7 @@ export const Authors = defineDocumentType(() => ({
 
 export const Snippet = defineDocumentType(() => ({
   name: 'Snippet',
-  filePathPattern: 'snippet/**/*.mdx',
+  filePathPattern: 'snippets/**/*.mdx',
   contentType: 'mdx',
   fields: {
     title: { type: 'string', required: true },
