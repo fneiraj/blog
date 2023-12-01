@@ -3268,7 +3268,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0":
+"@types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:^20.10.1":
   version: 20.10.1
   resolution: "@types/node@npm:20.10.1"
   dependencies:
@@ -10997,6 +10997,7 @@ __metadata:
     "@tailwindcss/forms": "npm:^0.5.4"
     "@tailwindcss/typography": "npm:^0.5.9"
     "@types/mdx": "npm:^2.0.5"
+    "@types/node": "npm:^20.10.1"
     "@types/react": "npm:^18.2.14"
     "@typescript-eslint/eslint-plugin": "npm:^6.1.0"
     "@typescript-eslint/parser": "npm:^6.1.0"
