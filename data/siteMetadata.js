@@ -8,8 +8,8 @@ const siteMetadata = {
   theme: 'system', // system, dark or light
   siteUrl: 'https://fneira.dev',
   siteRepo: 'https://github.com/fneiraj/blog/',
-  siteLogo: '/static/images/logo.png',
-  socialBanner: '/static/images/twitter-card.png',
+  siteLogo: null,
+  socialBanner: '',
   mastodon: null,
   email: 'hi@fneira.dev',
   github: 'https://github.com/fneiraj',
