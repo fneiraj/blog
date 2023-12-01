@@ -1,37 +1,47 @@
-// @ts-check
-
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
   title: 'fneira.dev',
   author: 'Fernando Neira',
   headerTitle: 'fneira.dev',
-  description: '...',
+  description: '',
   language: 'es-CL',
   theme: 'system', // system, dark or light
   siteUrl: 'https://fneira.dev',
-  siteRepo: 'https://github.com/fneiraj/blog',
+  siteRepo: 'https://github.com/fneiraj/blog/',
   siteLogo: '/static/images/logo.png',
-  image: '/static/images/avatar.png',
-  socialBanner: '/static/images/logo.png',
+  socialBanner: '/static/images/twitter-card.png',
+  mastodon: null,
   email: 'hi@fneira.dev',
   github: 'https://github.com/fneiraj',
+  twitter: null,
+  facebook: null,
+  youtube: null,
   linkedin: 'https://www.linkedin.com/in/fneiraj/',
   locale: 'es-CL',
-  analytics: {
-    // If you want to use an analytics provider you have to add it to the
-    // content security policy in the `next.config.js` file.
-    // supports plausible, simpleAnalytics, umami or googleAnalytics
-    plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
-    simpleAnalytics: false, // true or false
-    umamiWebsiteId: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
-    posthogProjectApiKey: '', // e.g. AhnJK8392ndPOav87as450xd
-    googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
-  },
-  /*  newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus
-    // Please add your .env file and modify it according to your selection
-    provider: 'buttondown',
-  },*/
+  //  analytics: {
+  // If you want to use an analytics provider you have to add it to the
+  // content security policy in the `next.config.js` file.
+  // supports Plausible, Simple Analytics, Umami, Posthog or Google Analytics.
+  //    umamiAnalytics: {
+  // We use an env variable for this site to avoid other users cloning our analytics ID
+  //      umamiWebsiteId: process.env.NEXT_UMAMI_ID, // e.g. 123e4567-e89b-12d3-a456-426614174000
+  //    },
+  // plausibleAnalytics: {
+  //   plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
+  // },
+  // simpleAnalytics: {},
+  // posthogAnalytics: {
+  //   posthogProjectApiKey: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
+  // },
+  // googleAnalytics: {
+  //   googleAnalyticsId: '', // e.g. G-XXXXXXX
+  // },
+  //  },
+  //  newsletter: {
+  // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus
+  // Please add your .env file and modify it according to your selection
+  //    provider: 'buttondown',
+  //  },
   comments: {
     // If you want to use an analytics provider you have to add it to the
     // content security policy in the `next.config.js` file.
@@ -58,22 +68,24 @@ const siteMetadata = {
       // please provide a link below to your custom theme css file.
       // example: https://giscus.app/themes/custom_example.css
       themeURL: '',
+      // This corresponds to the `data-lang="en"` in giscus's configurations
+      lang: 'es',
     },
   },
-  //search: {
-  //  //   provider: 'kbar', // kbar or algolia
-  //  //   kbarConfig: {
-  //  //     searchDocumentsPath: 'search.json', // path to load documents to search
-  //  //   },
-  //  provider: 'algolia',
-  //  algoliaConfig: {
-  //    // The application ID provided by Algolia
-  //    appId: 'P5SCC1CBYG',
-  //    // Public API key: it is safe to commit it
-  //    apiKey: '9d3d8b330871fe7bd343fec2a81b1f69',
-  //    indexName: 'blog',
-  //  },
-  //},
+  search: {
+    //provider: 'kbar', // kbar or algolia
+    //    kbarConfig: {
+    //      searchDocumentsPath: 'search.json', // path to load documents to search
+    //    },
+    provider: 'algolia',
+    algoliaConfig: {
+      // The application ID provided by Algolia
+      appId: 'P5SCC1CBYG',
+      // Public API key: it is safe to commit it
+      apiKey: '9d3d8b330871fe7bd343fec2a81b1f69',
+      indexName: 'blog',
+    },
+  },
 }
 
 module.exports = siteMetadata
