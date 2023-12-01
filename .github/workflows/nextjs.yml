@@ -50,6 +50,7 @@ jobs:
         with:
           node-version: '20'
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+          corepack-enable: true
       - name: Restore cache
         uses: actions/cache@v3
         with:
@@ -60,13 +61,10 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
-      - name: Install yarn
-        run: corepack enable
       - name: Yarn version
         run: yarn --version
       - name: Install dependencies
-#        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-        run: yarn install --frozen-lockfile
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build project assets
         run: ${{ steps.detect-package-manager.outputs.manager }} build
       - name: Upload artifact
