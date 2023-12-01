@@ -10,7 +10,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import { BsCalendarDate } from 'react-icons/bs'
-import { HiOutlinePencil, HiOutlineClock, HiOutlineEye } from 'react-icons/hi'
+import { HiOutlinePencil, HiOutlineClock } from 'react-icons/hi'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
@@ -32,7 +32,7 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, title, tags } = content
+  const { filePath, path, slug, date, title, tags, readingTime } = content
   const basePath = path.split('/')[0]
 
   return (
@@ -44,7 +44,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             <div className="space-y-1 text-center">
               <dl className="space-y-10">
                 <div>
-                  <dt className="sr-only">Published on</dt>
+                  <dt className="sr-only">Publico el</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>
                       <BsCalendarDate className="-mt-1.5 mr-1.5 inline h-4 w-4" />
@@ -58,23 +58,24 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               </div>
               <div className="flex justify-center gap-5 py-4">
                 <span className="flex items-center gap-1.5">
-                  <HiOutlinePencil className="h-5 w-5" />1 words
+                  <HiOutlinePencil className="h-5 w-5" />
+                  {readingTime.words} palabras
                 </span>
                 <span className="flex items-center gap-1.5">
                   <HiOutlineClock className="h-5 w-5" />
-                  time
+                  {readingTime.text.replace('min', 'mins').replace('read', '')}
                 </span>
-                <span className="flex items-center gap-1.5">
+                {/*                <span className="flex items-center gap-1.5">
                   <HiOutlineEye className="h-5 w-5" />
-                  {/*<ViewCounter className="ml-0" slug={slug} blogPage={true} />*/}
+                  {/*<ViewCounter className="ml-0" slug={slug} blogPage={true} />
                   <div className="-ml-0.5">Views</div>
-                </span>
+                </span>*/}
               </div>
             </div>
           </header>
           <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0">
             <dl className="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
-              <dt className="sr-only">Authors</dt>
+              <dt className="sr-only">Autor</dt>
               <dd>
                 <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
                   {authorDetails.map((author) => (
@@ -89,7 +90,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                         />
                       )}
                       <dl className="whitespace-nowrap text-sm font-medium leading-5">
-                        <dt className="sr-only">Name</dt>
+                        <dt className="sr-only">Nombre</dt>
                         <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
                         <dt className="sr-only">Twitter</dt>
                         <dd>
@@ -145,7 +146,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                     {prev && prev.path && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                          Previous Article
+                          Post anterior
                         </h2>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
                           <Link href={`/${prev.path}`}>{prev.title}</Link>
@@ -155,7 +156,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                     {next && next.path && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                          Next Article
+                          Post siguiente
                         </h2>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
                           <Link href={`/${next.path}`}>{next.title}</Link>
@@ -169,9 +170,9 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 <Link
                   href={`/${basePath}`}
                   className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                  aria-label="Back to the blog"
+                  aria-label="Volver al blog"
                 >
-                  &larr; Back to the blog
+                  &larr; Volver al blog
                 </Link>
               </div>
             </footer>

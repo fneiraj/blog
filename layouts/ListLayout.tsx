@@ -7,7 +7,6 @@ import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
 
 interface PaginationProps {
   totalPages: number
@@ -31,15 +30,15 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
       <nav className="flex justify-between">
         {!prevPage && (
           <button className="cursor-auto disabled:opacity-50" disabled={!prevPage}>
-            Previous
+            Anterior
           </button>
         )}
         {prevPage && (
           <Link
             href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
-            rel="prev"
+            rel="anterior"
           >
-            Previous
+            Siguiente
           </Link>
         )}
         <span>
@@ -47,12 +46,12 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
         </span>
         {!nextPage && (
           <button className="cursor-auto disabled:opacity-50" disabled={!nextPage}>
-            Next
+            Anterior
           </button>
         )}
         {nextPage && (
-          <Link href={`/${basePath}/page/${currentPage + 1}`} rel="next">
-            Next
+          <Link href={`/${basePath}/page/${currentPage + 1}`} rel="siguiente">
+            Siguiente
           </Link>
         )}
       </nav>
@@ -85,12 +84,12 @@ export default function ListLayout({
           </h1>
           <div className="relative max-w-lg">
             <label>
-              <span className="sr-only">Search articles</span>
+              <span className="sr-only">Buscar posts</span>
               <input
-                aria-label="Search articles"
+                aria-label="Buscar posts"
                 type="text"
                 onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Search articles"
+                placeholder="Buscar posts"
                 className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
               />
             </label>
@@ -111,16 +110,20 @@ export default function ListLayout({
           </div>
         </div>
         <ul>
-          {!filteredBlogPosts.length && 'No posts found.'}
+          {!filteredBlogPosts.length && 'No se encontraron posts.'}
           {displayPosts.map((post) => {
             const { path, date, title, summary, tags } = post
             return (
               <li key={path} className="py-4">
                 <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                   <dl>
-                    <dt className="sr-only">Published on</dt>
-                    <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                      <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                    <dt className="sr-only">Publicado el</dt>
+                    <dd className="text-sm font-normal leading-6 text-gray-500 dark:text-gray-400">
+                      <time dateTime={date}>{formatDate(date, 'es-CL')}</time>
+                      {' • '}
+                      {/*'🕐'.repeat(Math.ceil(post.readingTime['minutes'] / 5))*/}
+                      {`  `}
+                      {post.readingTime['text'].replace('min', 'mins').replace('read', '')}
                     </dd>
                   </dl>
                   <div className="space-y-3 xl:col-span-3">

@@ -3,22 +3,23 @@
 
 import { usePathname } from 'next/navigation'
 import { slug } from 'github-slugger'
-import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Snippet } from 'contentlayer/generated'
 import Link from '@/components/Link'
-import Tag from '@/components/Tag'
-import tagData from 'app/tag-data.json'
+import tagData from 'app/snippet-tech-data.json'
+import { SnippetCard } from '@/components/SnippetCard'
+import TagWithoutLink from '@/components/TagWithoutLink'
 
 interface PaginationProps {
   totalPages: number
   currentPage: number
 }
 interface ListLayoutProps {
-  posts: CoreContent<Snippet>[]
+  snippets: CoreContent<Snippet>[]
   title: string
   initialDisplayPosts?: CoreContent<Snippet>[]
   pagination?: PaginationProps
+  selectedTag?: string
 }
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
@@ -32,15 +33,15 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
       <nav className="flex justify-between">
         {!prevPage && (
           <button className="cursor-auto disabled:opacity-50" disabled={!prevPage}>
-            Previous
+            Anterior
           </button>
         )}
         {prevPage && (
           <Link
             href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
-            rel="prev"
+            rel="anterior"
           >
-            Previous
+            Anterior
           </Link>
         )}
         <span>
@@ -48,12 +49,12 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
         </span>
         {!nextPage && (
           <button className="cursor-auto disabled:opacity-50" disabled={!nextPage}>
-            Next
+            Siguiente
           </button>
         )}
         {nextPage && (
-          <Link href={`/${basePath}/page/${currentPage + 1}`} rel="next">
-            Next
+          <Link href={`/${basePath}/page/${currentPage + 1}`} rel="siguiente">
+            Siguiente
           </Link>
         )}
       </nav>
@@ -62,7 +63,7 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
 }
 
 export default function SnippetsListLayout({
-  posts,
+  snippets,
   title,
   initialDisplayPosts = [],
   pagination,
@@ -72,7 +73,54 @@ export default function SnippetsListLayout({
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
 
-  const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
+  const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : snippets
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const Tags = () => {
+    return (
+      <>
+        {sortedTags.map((t) => {
+          ;<div className="my-3">
+            {pathname.split('/tags/')[1] === slug(t) ? (
+              <h3 className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
+                {`${t} (${tagCounts[t]})`}
+              </h3>
+            ) : (
+              <Link
+                href={`/tags/${slug(t)}`}
+                className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
+                aria-label={`View posts tagged ${t}`}
+              >
+                {`${t} (${tagCounts[t]})`}
+              </Link>
+            )}
+          </div>
+        })}
+      </>
+    )
+  }
+
+  const TechsList = () => {
+    return (
+      <div className="hidden h-full max-h-screen flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 sm:flex">
+        <div className="flex px-6 py-4">
+          {sortedTags.map((t) => {
+            return (
+              <div key={t} className="">
+                <SnippetCard
+                  snippet={{
+                    title: `${t} - ${tagCounts[t]} snippets`,
+                    type: t,
+                    isSelected: pathname.split('/tags/')[1]?.includes(slug(t)),
+                  }}
+                />
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -82,46 +130,12 @@ export default function SnippetsListLayout({
             {title}
           </h1>
         </div>
-        <div className="flex sm:space-x-24">
-          <div className="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 sm:flex">
-            <div className="px-6 py-4">
-              {pathname.startsWith('/blog') ? (
-                <h3 className="font-bold uppercase text-primary-500">All Posts</h3>
-              ) : (
-                <Link
-                  href={`/blog`}
-                  className="font-bold uppercase text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-                >
-                  All Posts
-                </Link>
-              )}
-              <ul>
-                {sortedTags.map((t) => {
-                  return (
-                    <li key={t} className="my-3">
-                      {pathname.split('/tags/')[1] === slug(t) ? (
-                        <h3 className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
-                          {`${t} (${tagCounts[t]})`}
-                        </h3>
-                      ) : (
-                        <Link
-                          href={`/tags/${slug(t)}`}
-                          className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-                          aria-label={`View posts tagged ${t}`}
-                        >
-                          {`${t} (${tagCounts[t]})`}
-                        </Link>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          </div>
+        <div className="flex flex-col">
+          <TechsList />
           <div>
             <ul>
               {displayPosts.map((post) => {
-                const { path, date, title, summary, tags } = post
+                const { path, title, summary, tags } = post
                 return (
                   <li key={slug} className="py-6">
                     <article>
@@ -130,14 +144,6 @@ export default function SnippetsListLayout({
                         className="group flex bg-transparent bg-opacity-20 px-2 transition duration-100 hover:scale-105 hover:rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800"
                       >
                         <div className="space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 hover:rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                          <dl>
-                            <dt className="sr-only">Published on</dt>
-                            <dd className="text-sm font-normal leading-6 text-gray-500 dark:text-gray-400">
-                              <time dateTime={date}>{formatDate(date)}</time>
-                              {' • '}
-                              views
-                            </dd>
-                          </dl>
                           <div className="space-y-5 xl:col-span-4">
                             <div className="space-y-1">
                               <div>
@@ -152,7 +158,7 @@ export default function SnippetsListLayout({
                               </div>
                               <div className="flex flex-wrap">
                                 {tags.map((tag) => (
-                                  <Tag key={tag} text={tag} />
+                                  <TagWithoutLink key={tag} text={tag} />
                                 ))}
                               </div>
                               <div className="prose max-w-none pt-5 text-gray-500 dark:text-gray-400">

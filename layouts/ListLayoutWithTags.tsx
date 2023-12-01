@@ -32,7 +32,7 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
       <nav className="flex justify-between">
         {!prevPage && (
           <button className="cursor-auto disabled:opacity-50" disabled={!prevPage}>
-            Previous
+            Anterior
           </button>
         )}
         {prevPage && (
@@ -40,20 +40,20 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
             href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
             rel="prev"
           >
-            Previous
+            Anterior
           </Link>
         )}
         <span>
-          {currentPage} of {totalPages}
+          {currentPage} de {totalPages}
         </span>
         {!nextPage && (
           <button className="cursor-auto disabled:opacity-50" disabled={!nextPage}>
-            Next
+            Siguiente
           </button>
         )}
         {nextPage && (
           <Link href={`/${basePath}/page/${currentPage + 1}`} rel="next">
-            Next
+            Siguiente
           </Link>
         )}
       </nav>
@@ -86,13 +86,13 @@ export default function ListLayoutWithTags({
           <div className="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 sm:flex">
             <div className="px-6 py-4">
               {pathname.startsWith('/blog') ? (
-                <h3 className="font-bold uppercase text-primary-500">All Posts</h3>
+                <h3 className="font-bold uppercase text-primary-500">Todos los posts</h3>
               ) : (
                 <Link
                   href={`/blog`}
                   className="font-bold uppercase text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
                 >
-                  All Posts
+                  Todos los posts
                 </Link>
               )}
               <ul>
@@ -131,11 +131,13 @@ export default function ListLayoutWithTags({
                       >
                         <div className="space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 hover:rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                           <dl>
-                            <dt className="sr-only">Published on</dt>
+                            <dt className="sr-only">Publicado el</dt>
                             <dd className="text-sm font-normal leading-6 text-gray-500 dark:text-gray-400">
-                              <time dateTime={date}>{formatDate(date)}</time>
+                              <time dateTime={date}>{formatDate(date, 'es-CL')}</time>
                               {' • '}
-                              views
+                              {/*'🕐'.repeat(Math.ceil(post.readingTime['minutes'] / 5))*/}
+                              {`  `}
+                              {post.readingTime['text'].replace('min', 'mins').replace('read', '')}
                             </dd>
                           </dl>
                           <div className="space-y-5 xl:col-span-4">

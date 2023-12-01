@@ -1,68 +1,42 @@
 import { ReactNode } from 'react'
+import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Blog } from 'contentlayer/generated'
+import type { Snippet } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
-import { BsCalendarDate } from 'react-icons/bs'
-import { HiOutlineClock, HiOutlinePencil } from 'react-icons/hi'
-import { BlogTags } from '@/components/BlogTag'
 
 interface LayoutProps {
-  content: CoreContent<Blog>
+  content: CoreContent<Snippet>
   children: ReactNode
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
 }
 
-const postDateTemplate: Intl.DateTimeFormatOptions = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-}
-
-export default function PostLayout({ content, next, prev, children }: LayoutProps) {
-  const { tags, slug, date, title, readingTime } = content
+export default function SnippetLayout({ content, next, prev, children }: LayoutProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { path, slug, date, title } = content
 
   return (
     <SectionContainer>
       <ScrollTopAndComment />
       <article>
         <div>
-          <header className="pt-6 xl:pb-5">
-            <div className="space-y-1 text-center">
-              <dl className="space-y-10">
+          <header>
+            <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
+              <dl>
                 <div>
                   <dt className="sr-only">Publico el</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>
-                      <BsCalendarDate className="-mt-1.5 mr-1.5 inline h-4 w-4" />
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
-                    </time>
+                    <time dateTime={date}>{formatDate(date, 'es-CL')}</time>
                   </dd>
                 </div>
               </dl>
               <div>
                 <PageTitle>{title}</PageTitle>
-              </div>
-              <div className="flex justify-center gap-5 py-4">
-                <span className="flex items-center gap-1.5">
-                  <HiOutlinePencil className="h-5 w-5" />
-                  {readingTime.words} palabras
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <HiOutlineClock className="h-5 w-5" />
-                  {readingTime.text.replace('min', 'mins').replace('read', '')}
-                </span>
-                {/*                <span className="flex items-center gap-1.5">
-                  <HiOutlineEye className="h-5 w-5" />
-                  {/*<ViewCounter className="ml-0" slug={slug} blogPage={true} />
-                  <div className="-ml-0.5">Views</div>
-                </span>*/}
               </div>
             </div>
           </header>
@@ -76,14 +50,6 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
               </div>
             )}
             <footer>
-              <div className="text-sm font-medium leading-5 xl:col-start-1 xl:row-start-2">
-                <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                  Tags
-                </h2>
-                <div className="mb-2 py-1">
-                  <BlogTags tags={tags} />
-                </div>
-              </div>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
                 {prev && prev.path && (
                   <div className="pt-4 xl:pt-8">

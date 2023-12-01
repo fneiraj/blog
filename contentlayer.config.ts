@@ -105,6 +105,7 @@ export const Blog = defineDocumentType(() => ({
         description: doc.summary,
         image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
         url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+        readingTime: readingTime(doc.body.raw),
       }),
     },
   },
@@ -128,22 +129,33 @@ export const Authors = defineDocumentType(() => ({
   computedFields,
 }))
 
-export const Snippet = defineDocumentType(() => ({
+function createSnippetTechCount(allSnippets) {
+  const techCount: Record<string, number> = {}
+  allSnippets.forEach((file) => {
+    if (file.tech && (!isProduction || file.draft !== true)) {
+      const formattedTech = GithubSlugger.slug(file.tech)
+      if (formattedTech in techCount) {
+        techCount[formattedTech] += 1
+      } else {
+        techCount[formattedTech] = 1
+      }
+    }
+  })
+  writeFileSync('./app/snippet-tech-data.json', JSON.stringify(techCount))
+}
+
+export const Snippets = defineDocumentType(() => ({
   name: 'Snippet',
   filePathPattern: 'snippets/**/*.mdx',
   contentType: 'mdx',
   fields: {
+    heading: { type: 'string', required: true },
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
-    tags: { type: 'list', of: { type: 'string' }, default: [] },
-    lastmod: { type: 'date' },
+    tech: { type: 'string', required: true },
     draft: { type: 'boolean' },
     summary: { type: 'string' },
-    images: { type: 'json' },
-    authors: { type: 'list', of: { type: 'string' } },
-    layout: { type: 'string' },
-    bibliography: { type: 'string' },
-    canonicalUrl: { type: 'string' },
+    tags: { type: 'list', of: { type: 'string' }, default: [] },
   },
   computedFields: {
     ...computedFields,
@@ -154,9 +166,7 @@ export const Snippet = defineDocumentType(() => ({
         '@type': 'BlogPosting',
         headline: doc.title,
         datePublished: doc.date,
-        dateModified: doc.lastmod || doc.date,
         description: doc.summary,
-        image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
         url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
       }),
     },
@@ -165,7 +175,7 @@ export const Snippet = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors, Snippet],
+  documentTypes: [Blog, Authors, Snippets],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
@@ -185,8 +195,9 @@ export default makeSource({
     ],
   },
   onSuccess: async (importData) => {
-    const { allBlogs } = await importData()
+    const { allBlogs, allSnippets } = await importData()
     createTagCount(allBlogs)
     createSearchIndex(allBlogs)
+    createSnippetTechCount(allSnippets)
   },
 })

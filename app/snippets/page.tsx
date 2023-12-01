@@ -5,23 +5,23 @@ import SnippetsListLayout from '@/layouts/SnippetsLayout'
 
 const SNIPPETS_PER_PAGE = 5
 
-export const metadata = genPageMetadata({ title: 'Snippet' })
+export const metadata = genPageMetadata({ title: 'Snippets' })
 
 export default function SnippetPage() {
-  const posts = allCoreContent(sortPosts(allSnippets))
+  const snippets = allCoreContent(sortPosts(allSnippets))
   const pageNumber = 1
-  const initialDisplayPosts = posts.slice(
+  const initialDisplayPosts = snippets.slice(
     SNIPPETS_PER_PAGE * (pageNumber - 1),
     SNIPPETS_PER_PAGE * pageNumber
   )
   const pagination = {
     currentPage: pageNumber,
-    totalPages: Math.ceil(posts.length / SNIPPETS_PER_PAGE),
+    totalPages: Math.ceil(snippets.length / SNIPPETS_PER_PAGE),
   }
 
   return (
     <SnippetsListLayout
-      posts={posts}
+      snippets={snippets}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title="All Posts"

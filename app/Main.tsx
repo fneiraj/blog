@@ -30,11 +30,13 @@ export default function Home({ posts }) {
                   >
                     <div className="space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 hover:rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                       <dl>
-                        <dt className="sr-only">Published on</dt>
+                        <dt className="sr-only">Publicado el</dt>
                         <dd className="text-sm font-normal leading-6 text-gray-500 dark:text-gray-400">
-                          <time dateTime={date}>{formatDate(date)}</time>
+                          <time dateTime={date}>{formatDate(date, 'es-CL')}</time>
                           {' • '}
-                          views
+                          {/*'🕐'.repeat(Math.ceil(post.readingTime['minutes'] / 5))*/}
+                          {`  `}
+                          {post.readingTime['text'].replace('min', 'mins').replace('read', '')}
                         </dd>
                       </dl>
                       <div className="space-y-5 xl:col-span-4">
@@ -74,7 +76,7 @@ export default function Home({ posts }) {
             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
             aria-label="All posts"
           >
-            All Posts &rarr;
+            Ver todos los posts &rarr;
           </Link>
         </div>
       )}
