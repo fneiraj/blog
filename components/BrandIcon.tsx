@@ -1,10 +1,6 @@
-import { Bash, Java, Proxmox } from '@/icons/index'
+import Icons from '@/icons/index'
 
-export const BrandIconsMap = {
-  bash: Bash,
-  java: Java,
-  proxmox: Proxmox,
-}
+export const BrandIconsMap = Icons
 
 export function BrandIcon(props: {
   type: keyof typeof BrandIconsMap
@@ -17,12 +13,12 @@ export function BrandIcon(props: {
 
   return isSelected ? (
     <Icon.on
-      className={className || 'h-16 w-16 lg:h-14 lg:w-14 xl:h-20 xl:w-20'}
+      className={className || 'h-10 w-10 lg:h-10 lg:w-10 xl:h-10 xl:w-10'}
       fill="currentColor"
     />
   ) : (
     <Icon.off
-      className={className || 'h-16 w-16 lg:h-14 lg:w-14 xl:h-20 xl:w-20'}
+      className={className || 'h-10 w-10 lg:h-10 lg:w-10 xl:h-10 xl:w-10'}
       fill="currentColor"
     />
   )

@@ -111,7 +111,7 @@ export default function SnippetsListLayout({
                   snippet={{
                     title: `${t} - ${tagCounts[t]} snippets`,
                     type: t,
-                    isSelected: pathname.split('/tags/')[1]?.includes(slug(t)),
+                    isSelected: pathname.split('/tags/')[1] === slug(t),
                   }}
                 />
               </div>
