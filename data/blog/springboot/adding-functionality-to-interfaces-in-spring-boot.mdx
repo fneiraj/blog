@@ -1,7 +1,7 @@
 ---
 title: Agregando funcionalidad a interfaces con springboot
 date: '2024-02-03'
-tags: ['springboot', 'code', 'java']
+tags: ['springboot', 'cglib', 'java', 'proxy']
 draft: false
 summary: Como agregar funcionalidad a interfaces con proxy en spring boot
 ---
@@ -192,7 +192,9 @@ public interface BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProc
 
 postProcessBeanDefinitionRegistry: es el metodo que permite modificar el registro de definición de bean interno del contexto de la aplicación después de su inicialización estándar. Se habrán cargado todas las definiciones de beans normales, pero todavía no se habrá creado una instancia de ningún bean. Esto permite agregar más definiciones de beans antes de que comience la siguiente fase de posprocesamiento.
 
-postProcessBeanFactory: 
+postProcessBeanFactory: es el metodo que permite modificar el beanFactory de springboot, en este caso no haremos nada en este metodo.
+
+createProxy: es el metodo donde creamos el proxy para nuestra interfaz y le damos funcionalidad, en este caso retorna un String con el nombre de la clase y el nombre del metodo.
 
 ### Realizando prueba
 
