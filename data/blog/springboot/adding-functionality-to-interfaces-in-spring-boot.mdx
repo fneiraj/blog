@@ -442,7 +442,7 @@ ahora debemos modificar el metodo createProxy de la clase postProcessBeanDefinit
 
 mediante el api de reflexión de java podemos obtener la anotación del método ejecutado mediante el proxy y asi obtener sus valores
 
-ahora solo queda agregar nuestra funcionalidad en base a esos valores, como por ejemplo:
+el unico incoveniente es que no podemos agregar dependencias ya que en este punto aun no se inicializado los beans de springboot, la forma que encontre de solucionar esto es utilizando BeanPostProcessor para sobreescribir el bean del proxy ya que en este punto si podemos inyectar dependencias.
 
 ```java
 private <T> T createProxy(final Class<T> targetClass) {
