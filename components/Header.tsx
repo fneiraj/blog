@@ -7,6 +7,7 @@ import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
 import { usePathname } from 'next/navigation'
 import TypewriterComponent from 'typewriter-effect'
+import EllipsisText from 'react-ellipsis-text'
 
 const Header = () => {
   const pathname = usePathname()
@@ -28,8 +29,8 @@ const Header = () => {
                   siteMetadata.headerTitle
                 )}
               </div> */}
-          <div className="text-primary-color dark:text-primary-color-dark flex items-center justify-between text-xl font-semibold">
-            {`~${title}`}{' '}
+          <div className="text-primary-color dark:text-primary-color-dark flex items-center justify-between truncate text-xl font-semibold">
+            <EllipsisText text={`~${title} `} length={35} />
             <TypewriterComponent
               options={{
                 strings: [],
