@@ -3,7 +3,7 @@ import PageTitle from '@/components/PageTitle'
 //import PostCard from '@/components/PostCard'
 import Link from '@/components/Link'
 import Divider from '@/components/Divider'
-import { Post } from 'contentlayer/generated'
+import { Blog } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
 import Tag from '@/components/Tag'
 
@@ -13,7 +13,7 @@ export default function Blog({
   selectedTag,
 }: {
   tags: Record<string, number>
-  posts: Array<Post>
+  posts: Array<Blog>
   selectedTag?: string
 }) {
   //const MAX_DISPLAY = 4
@@ -22,7 +22,7 @@ export default function Blog({
   const tagKeys = Object.keys(tags)
   const sortedTags = tagKeys.sort((a, b) => tags[b] - tags[a])
 
-  const timeMap: Map<string, Map<string, Array<Post>>> = new Map()
+  const timeMap: Map<string, Map<string, Array<Blog>>> = new Map()
   for (const post of posts) {
     if (post.date !== null) {
       const year: string = new Date(post.date).getFullYear().toString()
@@ -113,7 +113,7 @@ export default function Blog({
                                 <Link href={`/blog/${post.slug}`}>
                                   <span
                                     className={
-                                      'text-hans-100 hover:text-hans-200 dark:text-opacity-80'
+                                      'text-hans-100 hover:text-hans-200 hover:text-primary-500 dark:text-opacity-80'
                                     }
                                   >
                                     {post.title}

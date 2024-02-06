@@ -1,10 +1,10 @@
 import Link from '@/components/Link'
-import { Post } from 'contentlayer/generated'
+import { Blog } from 'contentlayer/generated'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import siteMetadata from '@/data/siteMetadata'
 import Tag from './Tag'
 
-const PostCard = ({ post, tag }: { post: CoreContent<Post>; tag?: 'plog' }) => {
+const PostCard = ({ post, tag }: { post: CoreContent<Blog>; tag?: 'plog' }) => {
   const { slug, date, title, summary, tags } = post
   return (
     <Link href={`/blog/${slug}`}>

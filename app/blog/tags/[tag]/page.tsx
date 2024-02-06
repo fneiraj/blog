@@ -1,5 +1,5 @@
 import { slug } from 'github-slugger'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
+import { sortPosts } from 'pliny/utils/contentlayer'
 import siteMetadata from '@/data/siteMetadata'
 import { allBlogs } from 'contentlayer/generated'
 import tagData from 'app/tag-data.json'
@@ -34,8 +34,9 @@ export default function TagPage({ params }: { params: { tag: string } }) {
   const tag = decodeURI(params.tag)
   // Capitalize first letter and convert space to dash
   const tags = tagData as Record<string, number>
-  const filteredPosts = allCoreContent(
-    sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
+  const filteredPosts = sortPosts(
+    allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag))
   )
+
   return <BlogPage tags={tags} posts={filteredPosts} selectedTag={tag} />
 }

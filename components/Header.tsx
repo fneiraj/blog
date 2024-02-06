@@ -29,7 +29,7 @@ const Header = () => {
                   siteMetadata.headerTitle
                 )}
               </div> */}
-          <div className="text-primary-color dark:text-primary-color-dark flex items-center justify-between truncate text-xl font-semibold">
+          <div className="text-primary-color dark:text-primary-color-dark flex items-center justify-between truncate text-xl font-semibold hover:text-primary-500">
             <EllipsisText text={`~${title} `} length={35} />
             <TypewriterComponent
               options={{
