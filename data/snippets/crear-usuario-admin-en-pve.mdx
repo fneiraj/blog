@@ -1,0 +1,13 @@
+---
+heading: 'Crear usuario admin en proxmox'
+title: "Crear usuario administrador en proxmox"
+tech: 'Proxmox'
+tags: ['pve', 'linux']
+---
+
+```bash:as root
+adduser fneiraj
+pveum useradd fneiraj@pam
+pveum passwd fneiraj@pam
+pveum aclmod / -user fneiraj@pam -role Administrator
+```
