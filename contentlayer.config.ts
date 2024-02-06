@@ -151,7 +151,9 @@ export const Snippets = defineDocumentType(() => ({
   fields: {
     heading: { type: 'string', required: true },
     title: { type: 'string', required: true },
+    date: { type: 'date', required: true },
     tech: { type: 'string', required: true },
+    draft: { type: 'boolean' },
     summary: { type: 'string' },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
   },

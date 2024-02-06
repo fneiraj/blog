@@ -27,6 +27,8 @@ export async function generateMetadata({
     return
   }
 
+  const publishedAt = new Date(post.date).toISOString()
+
   return {
     title: post.title,
     description: post.summary,
@@ -36,6 +38,7 @@ export async function generateMetadata({
       siteName: siteMetadata.title,
       locale: 'en_US',
       type: 'article',
+      publishedTime: publishedAt,
       url: './',
     },
     twitter: {
