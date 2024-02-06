@@ -5,7 +5,7 @@ import siteMetadata from '@/data/siteMetadata'
 import Tag from './Tag'
 
 const PostCard = ({ post, tag }: { post: CoreContent<Post>; tag?: 'plog' }) => {
-  const { slug, date, title, summary, tags, image } = post
+  const { slug, date, title, summary, tags } = post
   return (
     <Link href={`/blog/${slug}`}>
       <article
