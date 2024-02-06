@@ -69,7 +69,10 @@ export default function Blog({
         </div>
 
         <div>
-          <PageTitle>Articulos</PageTitle>
+          <PageTitle>
+            Articulos
+            {selectedTag && ` sobre ${selectedTag[0].toUpperCase()}${selectedTag.slice(1)}`}
+          </PageTitle>
           {Array.from(timeMap.keys()).map((year) => {
             return (
               <div key={year}>

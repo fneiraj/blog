@@ -10,7 +10,7 @@ import BlogPage from 'app/blog/blog-page'
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const tag = decodeURI(params.tag)
   return genPageMetadata({
-    title: tag,
+    title: 'Articulos sobre ' + tag[0].toUpperCase() + tag.slice(1),
     description: `${siteMetadata.title} ${tag} tagged content`,
     alternates: {
       canonical: './',
