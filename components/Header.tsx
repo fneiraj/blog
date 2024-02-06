@@ -11,7 +11,7 @@ import EllipsisText from 'react-ellipsis-text'
 
 const Header = () => {
   const pathname = usePathname()
-  const title = pathname === '/' ? '/home' : pathname === '/about' ? '/about-me' : pathname
+  const title = pathname === '/' ? '/home' : pathname
 
   return (
     <header className="flex items-center justify-between py-10">
