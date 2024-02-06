@@ -22,6 +22,7 @@
       "@/layouts/*": ["layouts/*"],
       "@/css/*": ["css/*"],
       "@/icons/*": ["icons/*"],
+      "@/lib/*": ["lib/*"],
 
       "contentlayer/generated": ["./.contentlayer/generated"]
     },
