@@ -45,9 +45,9 @@ const computedFields: ComputedFields = {
 /**
  * Count the occurrences of all tags across blog posts and write to json file
  */
-function createTagCount(allBlogs) {
+function createTagCount(allPosts) {
   const tagCount: Record<string, number> = {}
-  allBlogs.forEach((file) => {
+  allPosts.forEach((file) => {
     if (file.tags && (!isProduction || file.draft !== true)) {
       file.tags.forEach((tag) => {
         const formattedTag = GithubSlugger.slug(tag)
@@ -62,21 +62,21 @@ function createTagCount(allBlogs) {
   writeFileSync('./app/tag-data.json', JSON.stringify(tagCount))
 }
 
-function createSearchIndex(allBlogs) {
+function createSearchIndex(allPosts) {
   if (
     siteMetadata?.search?.provider === 'kbar' &&
     siteMetadata.search.kbarConfig.searchDocumentsPath
   ) {
     writeFileSync(
       `public/${siteMetadata.search.kbarConfig.searchDocumentsPath}`,
-      JSON.stringify(allCoreContent(sortPosts(allBlogs)))
+      JSON.stringify(allCoreContent(sortPosts(allPosts)))
     )
     console.log('Local search index generated...')
   }
 }
 
-export const Blog = defineDocumentType(() => ({
-  name: 'Blog',
+export const Post = defineDocumentType(() => ({
+  name: 'Post',
   filePathPattern: 'blog/**/*.mdx',
   contentType: 'mdx',
   fields: {
@@ -175,7 +175,7 @@ export const Snippets = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors, Snippets],
+  documentTypes: [Post, Authors, Snippets],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
@@ -195,9 +195,9 @@ export default makeSource({
     ],
   },
   onSuccess: async (importData) => {
-    const { allBlogs, allSnippets } = await importData()
-    createTagCount(allBlogs)
-    createSearchIndex(allBlogs)
+    const { allPosts, allSnippets } = await importData()
+    createTagCount(allPosts)
+    createSearchIndex(allPosts)
     createSnippetTechCount(allSnippets)
   },
 })

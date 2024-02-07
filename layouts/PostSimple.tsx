@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Blog } from 'contentlayer/generated'
+import type { Post } from 'contentlayer/generated'
 import Comments from '@/components/post/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
@@ -14,7 +14,7 @@ import BlogMeta from '@/components/post/BlogMeta'
 import { TOC } from '@/components/toc/Toc'
 
 interface LayoutProps {
-  content: CoreContent<Blog>
+  content: CoreContent<Post>
   children: ReactNode
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
