@@ -1,4 +1,4 @@
-import Tag from './Tag'
+import Tag from '../tags/Tag'
 
 export function BlogTags({ tags }: { tags: string[] }) {
   if (!tags || tags.length === 0) {

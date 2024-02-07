@@ -7,8 +7,8 @@ import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Snippet } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import tagData from 'app/snippet-tech-data.json'
-import { SnippetCard } from '@/components/SnippetCard'
-import TagWithoutLink from '@/components/TagWithoutLink'
+import { SnippetCard } from '@/components/snippet/SnippetCard'
+import TagWithoutLink from '@/components/tags/TagWithoutLink'
 
 interface PaginationProps {
   totalPages: number
@@ -138,36 +138,35 @@ export default function SnippetsListLayout({
                 const { path, title, summary, tags } = post
                 return (
                   <li key={slug} className="py-6">
-                    <article>
-                      <Link
+                    <article className="group flex rounded-xl bg-transparent bg-opacity-20 px-2 transition duration-100 hover:scale-105 hover:bg-gray-100 dark:hover:bg-gray-800">
+                      {/*<Link
                         href={`/${path}`}
-                        className="group flex bg-transparent bg-opacity-20 px-2 transition duration-100 hover:scale-105 hover:rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800"
-                      >
-                        <div className="space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 hover:rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                          <div className="space-y-5 xl:col-span-4">
-                            <div className="space-y-1">
-                              <div>
-                                <h2 className="text-2xl font-bold leading-8 tracking-tight">
-                                  <Link
-                                    href={`/${path}`}
-                                    className="text-gray-900 transition duration-500 ease-in-out hover:text-primary-500 dark:text-gray-100 dark:hover:text-primary-500"
-                                  >
-                                    {title}
-                                  </Link>
-                                </h2>
-                              </div>
-                              <div className="flex flex-wrap">
-                                {tags.map((tag) => (
-                                  <TagWithoutLink key={tag} text={tag} />
-                                ))}
-                              </div>
-                              <div className="prose max-w-none pt-5 text-gray-500 dark:text-gray-400">
-                                {summary}
-                              </div>
+                >*/}
+                      <div className="space-y-2 bg-transparent bg-opacity-20 p-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
+                        <div className="space-y-5 xl:col-span-4">
+                          <div className="space-y-1">
+                            <div>
+                              <h2 className="text-2xl font-bold leading-8 tracking-tight">
+                                <Link
+                                  href={`/${path}`}
+                                  className="text-gray-900 transition duration-500 ease-in-out hover:text-primary-500 dark:text-gray-100 dark:hover:text-primary-500"
+                                >
+                                  {title}
+                                </Link>
+                              </h2>
+                            </div>
+                            <div className="flex flex-wrap">
+                              {tags.map((tag) => (
+                                <TagWithoutLink key={tag} text={tag} />
+                              ))}
+                            </div>
+                            <div className="prose max-w-none pt-5 text-gray-500 dark:text-gray-400">
+                              {summary}
                             </div>
                           </div>
                         </div>
-                      </Link>
+                      </div>
+                      {/*</Link>*/}
                     </article>
                   </li>
                 )

@@ -2,10 +2,10 @@
 import PageTitle from '@/components/PageTitle'
 //import PostCard from '@/components/PostCard'
 import Link from '@/components/Link'
-import Divider from '@/components/Divider'
+import Divider from '@/components/post/Divider'
 import { Blog } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
-import Tag from '@/components/Tag'
+import Tag from '@/components/tags/Tag'
 
 export default function Blog({
   tags,

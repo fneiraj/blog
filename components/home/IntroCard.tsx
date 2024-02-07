@@ -1,7 +1,7 @@
 import Link from '@/components/Link'
 import { RoughNotation } from 'react-rough-notation'
 
-const HomeHeader = () => {
+const IntroCard = () => {
   return (
     <div className="mb-12 flex flex-col items-center gap-x-12 xl:flex-row">
       <div className="pt-6">
@@ -134,4 +134,4 @@ const HomeHeader = () => {
   )
 }
 
-export default HomeHeader
+export default IntroCard

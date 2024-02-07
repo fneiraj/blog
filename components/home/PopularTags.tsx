@@ -2,7 +2,7 @@ import { map } from 'lodash'
 
 import popularTags from '@/data/popularTags'
 import Link from '@/components/Link'
-import BrandIcon from './BrandIcon'
+import BrandIcon from '../brand-icons'
 
 const PopularTags = () => {
   return (

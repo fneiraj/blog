@@ -3,8 +3,8 @@ import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Snippet } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
-import SectionContainer from '@/components/SectionContainer'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import SectionContainer from '@/components/layout/SectionContainer'
+import ScrollTopAndComment from '@/components/post/ScrollTopAndComment'
 
 interface LayoutProps {
   content: CoreContent<Snippet>

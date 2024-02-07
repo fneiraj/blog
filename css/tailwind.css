@@ -70,3 +70,9 @@ input:-webkit-autofill:focus {
   @apply bg-green-900;
 }
 /* END: CSS popular tags */
+
+/* START: ViewTransition */
+::view-transition-old,
+::view-transition-new {
+  animation-duration: 5s;
+}

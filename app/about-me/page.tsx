@@ -3,8 +3,8 @@
 //import AuthorLayout from '@/layouts/AuthorLayout'
 //import { coreContent } from 'pliny/utils/contentlayer'
 import { genPageMetadata } from 'app/seo'
-import BrandIcon from '@/components/BrandIcon'
-import Projects from '@/components/Projects'
+import Projects from '@/components/projects/Projects'
+import BrandIcon from '@/components/brand-icons'
 
 export const metadata = genPageMetadata({ title: 'About me' })
 
@@ -28,20 +28,20 @@ export default function Page() {
             <b>Frameworks & Tools:</b>
             <span className="ml-2 space-x-2">
               <i className="inline-block">
-                <BrandIcon type="java" className="h-8 w-8" />
+                <BrandIcon type="Java" className="h-8 w-8" />
               </i>
               <i className="inline-block">
-                <BrandIcon type="java" className="h-8 w-8" />
+                <BrandIcon type="Java" className="h-8 w-8" />
               </i>
               <i className="inline-block">
-                <BrandIcon type="java" className="h-8 w-8" />
+                <BrandIcon type="Java" className="h-8 w-8" />
               </i>
               <i className="inline-block">
-                <BrandIcon type="java" className="h-8 w-8" />
+                <BrandIcon type="Java" className="h-8 w-8" />
               </i>
               <i className="inline-block">
                 {' '}
-                <BrandIcon type="java" className="h-8 w-8" />
+                <BrandIcon type="Java" className="h-8 w-8" />
               </i>
             </span>
           </p>

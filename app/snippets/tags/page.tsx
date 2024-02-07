@@ -1,6 +1,6 @@
 import { genPageMetadata } from 'app/seo'
 import tagData from 'app/snippet-tech-data.json'
-import { SnippetCard } from '@/components/SnippetCard'
+import { SnippetCard } from '@/components/snippet/SnippetCard'
 
 export const metadata = genPageMetadata({ title: 'Snippets' })
 

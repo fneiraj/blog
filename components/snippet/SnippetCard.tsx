@@ -1,5 +1,5 @@
-import { SnippetIcon } from './SnippetIcon'
-import Link from './Link'
+import Link from '../Link'
+import BrandIcon from '../brand-icons'
 
 export function SnippetCard({ snippet }) {
   const { type, title, isSelected } = snippet
@@ -13,7 +13,7 @@ export function SnippetCard({ snippet }) {
         className="shadow-intense hover:shadow-nextjs dark:shadow-intense-dark  dark:hover:shadow-nextjs-dark mb-4 flex cursor-pointer gap-6 rounded-lg border border-transparent p-3 transition duration-100 hover:scale-110 lg:mb-0 lg:p-4"
       >
         <div className="flex items-center justify-center">
-          <SnippetIcon type={type} isSelected={isSelected} />
+          <BrandIcon type={type} isSelected={isSelected} />
         </div>
       </div>
     </Link>

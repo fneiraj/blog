@@ -23,7 +23,8 @@
       "@/css/*": ["css/*"],
       "@/icons/*": ["icons/*"],
       "@/lib/*": ["lib/*"],
-
+      "@/hook/*": ["hook/*"],
+      "@/types/*": ["typesc/*"],
       "contentlayer/generated": ["./.contentlayer/generated"]
     },
     "plugins": [
