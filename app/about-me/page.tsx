@@ -6,7 +6,7 @@ import { genPageMetadata } from 'app/seo'
 import BrandIcon from '@/components/BrandIcon'
 import Projects from '@/components/Projects'
 
-export const metadata = genPageMetadata({ title: 'About' })
+export const metadata = genPageMetadata({ title: 'About me' })
 
 export default function Page() {
   //const author = allAuthors.find((p) => p.slug === 'default') as Authors
