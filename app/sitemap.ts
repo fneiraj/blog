@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .filter((post) => !post.draft)
     .map((post) => post.tags)
     .filter((value, index, array) => array.indexOf(value) === index)
+    .flatMap((tags) => tags)
     .map((tag) => ({
       url: `${siteUrl}/blog/tags/${tag}`,
     }))
@@ -27,12 +28,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: anippet.date,
     }))
 
-  const snippetTags = allSnippets
+  const snippetTechs = allSnippets
     .filter((snippet) => !snippet.draft)
-    .map((snippet) => snippet.tags)
+    .map((snippet) => snippet.tech)
     .filter((value, index, array) => array.indexOf(value) === index)
-    .map((tag) => ({
-      url: `${siteUrl}/snippets/tags/${tag}`,
+    .flatMap((tech) => tech)
+    .map((tech) => ({
+      url: `${siteUrl}/snippets/tags/${tech.toLowerCase()}`,
     }))
 
   const routes = ['', 'blog', 'snippets', 'about-me'].map((route) => ({
@@ -40,5 +42,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date().toISOString().split('T')[0],
   }))
 
-  return [...routes, ...blogRoutes, ...blogTags, ...snippetsRoutes, ...snippetTags]
+  return [...routes, ...blogRoutes, ...blogTags, ...snippetsRoutes, ...snippetTechs]
 }
