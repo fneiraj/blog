@@ -28,13 +28,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: anippet.date,
     }))
 
-  const snippetTechs = allSnippets
+  const snippetTags = allSnippets
     .filter((snippet) => !snippet.draft)
-    .map((snippet) => snippet.tech)
+    .map((snippet) => snippet.tag)
     .filter((value, index, array) => array.indexOf(value) === index)
-    .flatMap((tech) => tech)
-    .map((tech) => ({
-      url: `${siteUrl}/snippets/tags/${tech.toLowerCase()}`,
+    .flatMap((tag) => tag)
+    .map((tag) => ({
+      url: `${siteUrl}/snippets/tags/${tag.toLowerCase()}`,
     }))
 
   const routes = ['', 'blog', 'snippets', 'about-me'].map((route) => ({
@@ -42,5 +42,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date().toISOString().split('T')[0],
   }))
 
-  return [...routes, ...blogRoutes, ...blogTags, ...snippetsRoutes, ...snippetTechs]
+  return [...routes, ...blogRoutes, ...blogTags, ...snippetsRoutes, ...snippetTags]
 }

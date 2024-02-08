@@ -1,7 +1,3 @@
-//import { Authors, allAuthors } from 'contentlayer/generated'
-//import { MDXLayoutRenderer } from 'pliny/mdx-components'
-//import AuthorLayout from '@/layouts/AuthorLayout'
-//import { coreContent } from 'pliny/utils/contentlayer'
 import { genPageMetadata } from 'app/seo'
 import Projects from '@/components/projects/Projects'
 import BrandIcon from '@/components/brand-icons'
@@ -9,39 +5,37 @@ import BrandIcon from '@/components/brand-icons'
 export const metadata = genPageMetadata({ title: 'About me' })
 
 export default function Page() {
-  //const author = allAuthors.find((p) => p.slug === 'default') as Authors
-  //const mainContent = coreContent(author)
-
   return (
     <>
-      <div className="  max-w-none lg:prose-lg">
-        <h2 className="text-center font-extrabold">Backend developer</h2>
+      <div className=" prose max-w-none text-gray-900  lg:prose-lg dark:text-gray-100">
+        <h2 className="text-center font-extrabold  text-gray-900 dark:text-gray-100">
+          Backend Developer
+        </h2>
         <hr />
         <div>
-          {/* <p className="font-mono text-lg font-semibold text-[#bd93f9]">
-            `Springboot` `Nestjs` `Vue` `Serverless` `Python` `uni-app`
-  </p>*/}
-          <p>
-            <b>Programming Languages:</b> Java & Javascript.
+          <p className="font-mono text-lg font-semibold text-[#bd93f9]">
+            `Java` `Springboot` `Javascript` `Nodejs` `Nestjs`
           </p>
           <p>
-            <b>Frameworks & Tools:</b>
+            <b>Lenguajes:</b> Java, JavaScript & Typescript.
+          </p>
+          <p>
+            <b>Frameworks y Herramientas:</b>
             <span className="ml-2 space-x-2">
               <i className="inline-block">
-                <BrandIcon type="Java" className="h-8 w-8" />
+                <BrandIcon type="React" className="h-6 w-6" />
               </i>
               <i className="inline-block">
-                <BrandIcon type="Java" className="h-8 w-8" />
+                <BrandIcon type="Java" className="h-6 w-6" />
               </i>
               <i className="inline-block">
-                <BrandIcon type="Java" className="h-8 w-8" />
+                <BrandIcon type="Bash" className="h-6 w-6" />
               </i>
               <i className="inline-block">
-                <BrandIcon type="Java" className="h-8 w-8" />
+                <BrandIcon type="Javascript" className="h-6 w-6" />
               </i>
               <i className="inline-block">
-                {' '}
-                <BrandIcon type="Java" className="h-8 w-8" />
+                <BrandIcon type="Java" className="h-6 w-6" />
               </i>
             </span>
           </p>
@@ -49,7 +43,7 @@ export default function Page() {
 
         <hr />
 
-        <h2>Projects</h2>
+        <h2 className=" text-gray-900 dark:text-gray-100">Proyectos</h2>
         <Projects />
       </div>
     </>

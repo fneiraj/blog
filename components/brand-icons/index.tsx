@@ -2,12 +2,13 @@ import Icons from './icons'
 
 export const BrandIconsMap = Icons
 
-const BrandIcon = (props: {
+type Props = {
   type: keyof typeof BrandIconsMap
   className?: string
   isSelected?: boolean
-}) => {
-  const { type, className, isSelected } = props
+}
+
+const BrandIcon = ({ type, className, isSelected }: Props) => {
   const iconFinded = Object.keys(Icons).find((key) => key.toLowerCase() === type.toLowerCase())
 
   if (!iconFinded) {

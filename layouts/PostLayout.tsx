@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Post, Authors } from 'contentlayer/generated'
+import type { Post } from 'contentlayer/generated'
 import Comments from '@/components/post/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
@@ -25,13 +25,12 @@ const postDateTemplate: Intl.DateTimeFormatOptions = {
 
 interface LayoutProps {
   content: CoreContent<Post>
-  authorDetails: CoreContent<Authors>[]
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
   children: ReactNode
 }
 
-export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
+export default function PostLayout({ content, next, prev, children }: LayoutProps) {
   const { filePath, path, slug, date, title, tags, readingTime } = content
   const basePath = path.split('/')[0]
 
@@ -78,34 +77,28 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <dt className="sr-only">Autor</dt>
               <dd>
                 <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
-                  {authorDetails.map((author) => (
-                    <li className="flex items-center space-x-2" key={author.name}>
-                      {author.avatar && (
-                        <Image
-                          src={author.avatar}
-                          width={38}
-                          height={38}
-                          alt="avatar"
-                          className="h-10 w-10 rounded-full"
-                        />
-                      )}
-                      <dl className="whitespace-nowrap text-sm font-medium leading-5">
-                        <dt className="sr-only">Nombre</dt>
-                        <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
-                        <dt className="sr-only">Twitter</dt>
-                        <dd>
-                          {author.twitter && (
-                            <Link
-                              href={author.twitter}
-                              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                            >
-                              {author.twitter.replace('https://twitter.com/', '@')}
-                            </Link>
-                          )}
-                        </dd>
-                      </dl>
-                    </li>
-                  ))}
+                  <li className="flex items-center space-x-2" key={'Fernando Neira'}>
+                    <Image
+                      src={'#'}
+                      width={38}
+                      height={38}
+                      alt="avatar"
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <dl className="whitespace-nowrap text-sm font-medium leading-5">
+                      <dt className="sr-only">Nombre</dt>
+                      <dd className="text-gray-900 dark:text-gray-100">{'Fernando Neira'}</dd>
+                      <dt className="sr-only">Twitter</dt>
+                      <dd>
+                        <Link
+                          href={'http://fneira.dev/'}
+                          className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                        >
+                          {'@'}
+                        </Link>
+                      </dd>
+                    </dl>
+                  </li>
                 </ul>
               </dd>
             </dl>

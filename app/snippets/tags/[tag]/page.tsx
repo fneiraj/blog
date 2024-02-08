@@ -2,7 +2,7 @@ import { slug } from 'github-slugger'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import siteMetadata from '@/data/siteMetadata'
 import { allSnippets } from 'contentlayer/generated'
-import snippetTagData from 'app/snippet-tech-data.json'
+import snippetTagData from 'app/snippet-tag-data.json'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
 import SnippetsListLayout from '@/layouts/SnippetsLayout'
@@ -35,7 +35,7 @@ export default function SnippetTagPage({ params }: { params: { tag: string } }) 
   // Capitalize first letter and convert space to dash
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   const filteredPosts = allCoreContent(
-    sortPosts(allSnippets.filter((post) => post.tech && slug(post.tech).includes(tag)))
+    sortPosts(allSnippets.filter((post) => post.tag && slug(post.tag).includes(tag)))
   )
   return (
     <SnippetsListLayout

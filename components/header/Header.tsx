@@ -7,11 +7,17 @@ import ThemeSwitch from '../ThemeSwitch'
 import SearchButton from './SearchButton'
 import { usePathname } from 'next/navigation'
 import TypewriterComponent from 'typewriter-effect'
-import EllipsisText from 'react-ellipsis-text'
 
 const Header = () => {
   const pathname = usePathname()
   const title = pathname === '/' ? '/home' : pathname
+
+  const ellipsisText = (text: string, length: number) => {
+    if (text.length > length) {
+      return text.substring(0, length) + '...'
+    }
+    return text
+  }
 
   return (
     <header className="flex items-center justify-between py-10">
@@ -30,12 +36,12 @@ const Header = () => {
                 )}
               </div> */}
           <div className="text-primary-color dark:text-primary-color-dark flex items-center justify-between truncate text-xl font-semibold hover:text-primary-500">
-            <EllipsisText text={`~${title} `} length={35} />
             <TypewriterComponent
               options={{
-                strings: [],
+                strings: ellipsisText(title, 35),
                 autoStart: true,
-                loop: true,
+                loop: false,
+                delay: 50,
               }}
             />
           </div>

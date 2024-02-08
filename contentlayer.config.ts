@@ -87,7 +87,6 @@ export const Post = defineDocumentType(() => ({
     draft: { type: 'boolean' },
     summary: { type: 'string' },
     images: { type: 'json' },
-    authors: { type: 'list', of: { type: 'string' } },
     layout: { type: 'string' },
     bibliography: { type: 'string' },
     canonicalUrl: { type: 'string' },
@@ -111,37 +110,19 @@ export const Post = defineDocumentType(() => ({
   },
 }))
 
-export const Authors = defineDocumentType(() => ({
-  name: 'Authors',
-  filePathPattern: 'authors/**/*.mdx',
-  contentType: 'mdx',
-  fields: {
-    name: { type: 'string', required: true },
-    avatar: { type: 'string' },
-    occupation: { type: 'string' },
-    company: { type: 'string' },
-    email: { type: 'string' },
-    twitter: { type: 'string' },
-    linkedin: { type: 'string' },
-    github: { type: 'string' },
-    layout: { type: 'string' },
-  },
-  computedFields,
-}))
-
-function createSnippetTechCount(allSnippets) {
-  const techCount: Record<string, number> = {}
+function createSnippetTagCount(allSnippets) {
+  const tagCount: Record<string, number> = {}
   allSnippets.forEach((file) => {
-    if (file.tech && (!isProduction || file.draft !== true)) {
-      const formattedTech = GithubSlugger.slug(file.tech)
-      if (formattedTech in techCount) {
-        techCount[formattedTech] += 1
+    if (file.tag && (!isProduction || file.draft !== true)) {
+      const formattedTag = GithubSlugger.slug(file.tag)
+      if (formattedTag in tagCount) {
+        tagCount[formattedTag] += 1
       } else {
-        techCount[formattedTech] = 1
+        tagCount[formattedTag] = 1
       }
     }
   })
-  writeFileSync('./app/snippet-tech-data.json', JSON.stringify(techCount))
+  writeFileSync('./app/snippet-tag-data.json', JSON.stringify(tagCount))
 }
 
 export const Snippets = defineDocumentType(() => ({
@@ -149,13 +130,11 @@ export const Snippets = defineDocumentType(() => ({
   filePathPattern: 'snippets/**/*.mdx',
   contentType: 'mdx',
   fields: {
-    heading: { type: 'string', required: true },
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
-    tech: { type: 'string', required: true },
+    tag: { type: 'string', required: true },
     draft: { type: 'boolean' },
     summary: { type: 'string' },
-    tags: { type: 'list', of: { type: 'string' }, default: [] },
   },
   computedFields: {
     ...computedFields,
@@ -175,7 +154,7 @@ export const Snippets = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Post, Authors, Snippets],
+  documentTypes: [Post, Snippets],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
@@ -198,6 +177,6 @@ export default makeSource({
     const { allPosts, allSnippets } = await importData()
     createTagCount(allPosts)
     createSearchIndex(allPosts)
-    createSnippetTechCount(allSnippets)
+    createSnippetTagCount(allSnippets)
   },
 })

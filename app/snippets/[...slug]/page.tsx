@@ -69,6 +69,7 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   const post = allSnippets.find((p) => p.slug === slug) as Snippet
   const mainContent = coreContent(post)
   const jsonLd = post.structuredData
+  jsonLd['author'] = [{ '@type': 'Person', name: 'Fernando Neira' }]
 
   const Layout = layouts[defaultLayout]
 
