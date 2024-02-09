@@ -142,7 +142,7 @@ The injection point has the following annotations:
 
 creamos la clase que se encarga de agregar el bean de la interfaz al contenedor de spring y inyectarle funcionalidad con cglib
 
-```java:ResourceProviderBeanDefinitionRegistryPostProcessor.java
+```java:BeanDefinitionRegistryPostProcessor.java
 package dev.fneira.interfaceprocessor.imp;
 
 import dev.fneira.interfaceprocessor.interfaces.IMyResourceProvider;
@@ -180,7 +180,7 @@ public class ResourceProviderBeanDefinitionRegistryPostProcessor implements Bean
 
 ```
 
-Creamos la clase `ResourceProviderBeanDefinitionRegistryPostProcessor` que implementa `BeanDefinitionRegistryPostProcessor`, aqui sobreescribir el método postProcessBeanDefinitionRegistry: es el metodo que permite modificar el registro de definición de bean interno del contexto de la aplicación después de su inicialización estándar. Se habrán cargado todas las definiciones de beans normales, pero todavía no se habrá creado una instancia de ningún bean. Esto permite agregar más definiciones de beans antes de que comience la siguiente fase de posprocesamiento.
+Creamos la clase que implementa `BeanDefinitionRegistryPostProcessor`, aqui sobreescribir el método postProcessBeanDefinitionRegistry: es el metodo que permite modificar el registro de definición de bean interno del contexto de la aplicación después de su inicialización estándar. Se habrán cargado todas las definiciones de beans normales, pero todavía no se habrá creado una instancia de ningún bean. Esto permite agregar más definiciones de beans antes de que comience la siguiente fase de posprocesamiento.
 
 también tenemos el método `createProxy` que es donde creamos el proxy para nuestra interfaz y le damos funcionalidad, en este caso retorna un String con el nombre de la clase y el nombre del metodo.
 
@@ -248,7 +248,7 @@ vemos que falla, porque ahora no encuentra nuesto bean para IMyResource2Provider
 
 para solucionar esto de forma dinamica y automatica, debemos modificar la clase ResourceProviderBeanDefinitionRegistryPostProcessor para que nos permita escanear el proyecto y buscar las interfaces decoradas con la anotacion @ResourceProvider:
 
-```java:ResourceProviderBeanDefinitionRegistryPostProcessor.java
+```java:BeanDefinitionRegistryPostProcessor.java
 package dev.fneira.interfaceprocessor.imp;
 
 import dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider;
@@ -577,9 +577,9 @@ public class ResourceHandlerProxyFactoryBean
 }
 ```
 
-ahora modificamos la clase `ResourceProviderBeanDefinitionRegistryPostProcessor.java` para indicar cual clase es nuestra factory:
+ahora modificamos la clase que implementa `BeanDefinitionRegistryPostProcessor.java` para indicar cual clase es nuestra factory:
 
-```java:ResourceProviderBeanDefinitionRegistryPostProcessor.java
+```java:BeanDefinitionRegistryPostProcessor.java
 package dev.fneira.interfaceprocessor.imp;
 
 import dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider;

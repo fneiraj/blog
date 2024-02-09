@@ -85,7 +85,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
             </div>
           </div>
         </article>
-        <div className="hidden md:w-1/3 lg:block">{toc && <TOC data={toc} />}</div>
+        {toc && <TOC data={toc} />}
       </div>
     </SectionContainer>
   )
