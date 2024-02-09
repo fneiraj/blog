@@ -10,13 +10,32 @@ import TypewriterComponent from 'typewriter-effect'
 
 const Header = () => {
   const pathname = usePathname()
-  const title = pathname === '/' ? '/home' : pathname
 
   const ellipsisText = (text: string, length: number) => {
     if (text.length > length) {
       return text.substring(0, length) + '...'
     }
     return text
+  }
+
+  const getTitle = () => {
+    if (pathname === '/') {
+      return '/home'
+    }
+
+    if (pathname === '/blog' || pathname === '/snippets') {
+      return pathname
+    }
+
+    if (pathname.startsWith('/blog/tags') || pathname.startsWith('/snippets/tags')) {
+      return pathname
+    }
+
+    if (pathname.startsWith('/blog') || pathname.startsWith('/snippets')) {
+      return pathname.split('/').slice(0, 3).join('/') + '/...'
+    }
+
+    return pathname
   }
 
   return (
@@ -40,7 +59,7 @@ const Header = () => {
               <span className="mr-1">~$ </span>
               <TypewriterComponent
                 options={{
-                  strings: ' cat ' + ellipsisText(title, 30),
+                  strings: ' cat ' + ellipsisText(getTitle(), 30),
                   autoStart: true,
                   loop: false,
                   delay: 35,
