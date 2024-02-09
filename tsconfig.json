@@ -22,8 +22,8 @@
       "@/layouts/*": ["layouts/*"],
       "@/css/*": ["css/*"],
       "@/icons/*": ["icons/*"],
-      "@/lib/*": ["lib/*"],
-      "@/hook/*": ["hook/*"],
+      "@/libs/*": ["libs/*"],
+      "@/hooks/*": ["hooks/*"],
       "@/types/*": ["typesc/*"],
       "contentlayer/generated": ["./.contentlayer/generated"]
     },
@@ -44,6 +44,6 @@
     ".contentlayer/generated",
     ".contentlayer/generated/**/*.json",
     ".next/types/**/*.ts"
-  ],
+],
   "exclude": ["node_modules"]
 }
