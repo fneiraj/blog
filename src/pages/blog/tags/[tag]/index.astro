@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content'
+import BlogLayout from '@layouts/pages/BlogLayout.astro'
+import { getUniqueBlogTags } from '@utils/getUniqueTags'
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog')
+
+	const tags = getUniqueBlogTags(posts)
+
+	return tags.map(({ tag }) => {
+		return {
+			params: { tag },
+			props: { tag }
+		}
+	})
+}
+
+export interface Props {
+	tag: string
+}
+
+const { tag } = Astro.props
+---
+
+<BlogLayout {tag} />

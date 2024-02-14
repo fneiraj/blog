@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import {getSortedPosts} from "@utils/getSortedContent";
+import LatestPosts from '@components/main/LatestPosts.astro'
+import ViewAllPosts from '@components/main/ViewAllPosts.astro'
+
+const posts = await getCollection("blog");
+
+const sortedPosts = getSortedPosts(posts);
+
+const MAX_DISPLAY = 3;
+---
+
+<Layout>
+  <div class="divide-y divide-gray-200 dark:divide-gray-700">
+    {/*<HomeHeader />*/}
+    {/*<PopularTags />*/}
+    <LatestPosts posts={posts} maxDisplay={MAX_DISPLAY} />
+  </div>
+  {posts.length > MAX_DISPLAY && <ViewAllPosts />}
+</Layout>

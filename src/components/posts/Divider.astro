@@ -1,0 +1,24 @@
+---
+export interface Props {
+	className?: string
+}
+
+const { className } = Astro.props
+
+const hasSlot = !!Astro.slots.default
+---
+
+{
+	hasSlot ? (
+		<div class={`inline-flex w-full items-center justify-center ${className || ''}`}>
+			<hr class='my-8 h-px w-full border-0 bg-gray-200 dark:bg-gray-700' />
+			<span class='dark:bg-dark absolute left-1/2 -translate-x-1/2 rounded-xl bg-white px-3 font-medium text-gray-900'>
+				<div class='text-xl font-bold text-gray-500'>
+					<slot />
+				</div>
+			</span>
+		</div>
+	) : (
+		<hr class={`my-2 h-px border-0 bg-gray-200 dark:bg-gray-700 ${className || ''}`} />
+	)
+}
