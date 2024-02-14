@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content'
+import Layout from '@layouts/Layout.astro'
+import Tags from '@components/snippets/Tags.astro'
+import Snippet from '@components/snippets/Snippet.astro'
+import getUniqueTags from '@utils/getUniqueSnippetTags'
+import { getSnippetsByTag } from '@utils/getContentByTag'
+
+export interface Props {
+	tag?: string
+}
+
+const { tag } = Astro.props
+
+const allSnippets = await getCollection('snippet')
+
+const tags = getUniqueTags(allSnippets)
+
+const snippets = tag ? getSnippetsByTag(allSnippets, tag) : allSnippets
+
+const tagFormatted = tag ? tag[0].toUpperCase() + tag.slice(1) : undefined
+
+const layoutProps = {
+	title: `Snippets ${tagFormatted ? `- ${tagFormatted}` : ''} | fneira.dev`,
+	scrollSmooth: true
+}
+---
+
+<Layout {...layoutProps}>
+	<div>
+		<div class='pb-6'>
+			<h1
+				class='text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:hidden sm:text-4xl sm:leading-10 md:text-6xl md:leading-14'
+			>
+				Snippets
+			</h1>
+		</div>
+		<div class='flex flex-col'>
+			<Tags tags={tags} tagSelected={tag} />
+			<div class='container py-12'>
+				<div class='grid-cols-2 gap-6 lg:grid'>
+					{snippets.map((snippet) => <Snippet {snippet} />)}
+				</div>
+			</div>
+		</div>
+	</div>
+</Layout>

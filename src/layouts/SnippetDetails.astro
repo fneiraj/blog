@@ -1,0 +1,59 @@
+---
+import Layout from '@layouts/Layout.astro'
+import type { CollectionEntry } from 'astro:content'
+import { slugifyStr } from '@utils/slugify'
+import { SITE } from '@config'
+
+export interface Props {
+	snippet: CollectionEntry<'snippet'>
+}
+
+const { snippet } = Astro.props
+
+const { title, description, ogImage, canonicalURL, pubDatetime, modDatetime } = snippet.data
+
+const { Content } = await snippet.render()
+
+const ogImageUrl = typeof ogImage === 'string' ? ogImage : ogImage?.src
+const ogUrl = new URL(ogImageUrl ?? `/posts/${slugifyStr(snippet.slug)}.png`, Astro.url.origin).href
+
+const layoutProps = {
+	title: `${title} | ${SITE.title}`,
+	description,
+	pubDatetime,
+	modDatetime,
+	canonicalURL,
+	ogImage: ogUrl,
+	scrollSmooth: true
+}
+---
+
+<Layout {...layoutProps}>
+	<article>
+		<div>
+			<header>
+				<div class='space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700'>
+					<div>
+						<h1
+							class='mt-5 text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14'
+						>
+							{title}
+						</h1>
+					</div>
+				</div>
+			</header>
+			<div
+				class='grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0'
+			>
+				<div
+					class='divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0'
+				>
+					<div class='prose max-w-none pb-8 pt-10 dark:prose-invert'>
+						<Content />
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+</Layout>
+

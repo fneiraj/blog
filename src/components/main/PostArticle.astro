@@ -1,0 +1,71 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import Tag from '../Tag.astro'
+import { slugifyStr } from '@utils/slugify'
+
+export interface Props {
+	post: CollectionEntry<'blog'>
+}
+
+function formatDate(date: Date, locale: string) {
+	return new Date(date)
+		.toLocaleDateString(locale, {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		})
+		.toString()
+}
+
+const { post } = Astro.props
+const { slug, data, id } = post
+const { pubDatetime: date, title, tags, description: summary } = data
+
+const {
+	remarkPluginFrontmatter: { minutesRead }
+} = await post.render()
+---
+
+<li class='py-6'>
+	<article
+		class='group flex rounded-xl bg-transparent bg-opacity-20 px-2 transition duration-100 hover:scale-105 hover:bg-gray-100 dark:hover:bg-gray-800'
+	>
+		<div
+			class='space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0'
+		>
+			<dl>
+				<dt class='sr-only'>Publicado el</dt>
+				<dd
+					transition:name={slugifyStr(title + '-date')}
+					class='text-sm font-normal leading-6 text-gray-500 dark:text-gray-400'
+				>
+					<time datetime={date.toString()}>📆 {formatDate(date, 'es-CL')}</time>
+					{' • '}
+					🕒
+					{minutesRead.replace('min', 'mins').replace('read', '')}
+				</dd>
+			</dl>
+			<div class='space-y-5 xl:col-span-4'>
+				<div class='space-y-1'>
+					<div>
+						<h2 class='text-2xl font-bold leading-8 tracking-tight'>
+							<a
+								transition:name={slugifyStr(title)}
+								href={`/posts/${slug}`}
+								class='postTitleTitle text-gray-900 transition duration-500 ease-in-out hover:text-primary-500 dark:text-gray-100 dark:hover:text-primary-500'
+							>
+								{title}
+							</a>
+						</h2>
+					</div>
+					<div class='flex flex-wrap'>
+						{tags.map((tag) => <Tag text={tag} />)}
+					</div>
+					<div class='prose max-w-none pt-5 text-gray-500 dark:text-gray-400'>
+						{summary}
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+</li>

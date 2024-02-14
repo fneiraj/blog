@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#light-icon,
+html[data-theme="dark"] #dark-icon {
+  display: none;
+}
+
+#dark-icon,
+html[data-theme="dark"] #light-icon {
+  display: block;
+}
+
+.task-list-item::before {
+  @apply hidden;
+}
+
+.task-list-item {
+  @apply list-none;
+}
+
+.footnotes {
+  @apply mt-12 border-t border-gray-200 pt-8 dark:border-gray-700;
+}
+
+.data-footnote-backref {
+  @apply no-underline;
+}
+
+.csl-entry {
+  @apply my-5;
+}
+
+/* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition:
+    background-color 600000s 0s,
+    color 600000s 0s;
+}
+
+.katex-display {
+  overflow: auto hidden;
+}
+
+/* START: CSS Github discussion */
+#comments-container .giscus-frame {
+  @apply w-full;
+}
+
+/* END: CSS Github discussion */
+
+/* START: CSS popular tags */
+.popular-tags .java {
+  @apply bg-teal-50;
+  @apply text-black;
+}
+
+.popular-tags .javascript {
+  @apply bg-amber-400;
+}
+
+.popular-tags .typescript {
+  @apply bg-blue-500;
+}
+
+.popular-tags .nestjs {
+  @apply bg-rose-500;
+}
+
+.popular-tags .react {
+  @apply bg-sky-500;
+}
+
+.popular-tags .devops {
+  @apply bg-sky-600;
+}
+
+.popular-tags .database {
+  @apply bg-green-900;
+}
+
+/* END: CSS popular tags */
+
+/* START: ViewTransition */
+::view-transition-old,
+::view-transition-new {
+  animation-duration: 5s;
+}
+
+#sun-svg,
+html[class="dark"] #dark-icon {
+  display: none;
+}
+
+#moon-svg,
+html[class="dark"] #light-icon {
+  display: block;
+}
+
+
+@font-face {
+  font-family: Space_Grotesk;
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(/fonts/Space_Grotesk.woff2) format("woff2");
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01a0-01a1, U+01af-01b0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1ea0-1ef9, U+20ab
+}
+
+@font-face {
+  font-family: Space_Grotesk;
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(/fonts/Space_Grotesk.woff2) format("woff2");
+  unicode-range: U+0100-02af, U+0304, U+0308, U+0329, U+1e00-1e9f, U+1ef2-1eff, U+2020, U+20a0-20ab, U+20ad-20cf, U+2113, U+2c60-2c7f, U+a720-a7ff
+}
+
+@font-face {
+  font-family: Space_Grotesk;
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(/fonts/Space_Grotesk.woff2) format("woff2");
+  unicode-range: U+00??, U+0131, U+0152-0153, U+02bb-02bc, U+02c6, U+02da, U+02dc, U+0304, U+0308, U+0329, U+2000-206f, U+2074, U+20ac, U+2122, U+2191, U+2193, U+2212, U+2215, U+feff, U+fffd
+}
+
+* {
+  scroll-margin-top: 6rem;
+}

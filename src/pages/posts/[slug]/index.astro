@@ -1,0 +1,31 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content'
+import PostDetails from '@layouts/PostDetails.astro'
+
+export interface Props {
+	post: CollectionEntry<'blog'>
+	prevPost: CollectionEntry<'blog'>
+	nextPost: CollectionEntry<'blog'>
+}
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog', ({ data }) => !data.draft)
+
+	const numberOfPosts = posts.length
+
+	const postResult = posts.map((post, i) => ({
+		params: { slug: post.slug },
+		props: {
+			post,
+			prevPost: i + 1 === numberOfPosts ? undefined : posts[i + 1],
+			nextPost: i === 0 ? undefined : posts[i - 1]
+		}
+	}))
+
+	return [...postResult]
+}
+
+const { post, prevPost, nextPost } = Astro.props
+---
+
+<PostDetails post={post} prevPost={prevPost} nextPost={nextPost} />
