@@ -17,6 +17,9 @@ dependencies:
   '@astrojs/rss':
     specifier: ^4.0.2
     version: 4.0.5
+  '@docsearch/css':
+    specifier: ^3.5.2
+    version: 3.5.2
   '@docsearch/js':
     specifier: '3'
     version: 3.5.2(@algolia/client-search@4.22.1)(@types/react@18.2.55)(react-dom@16.14.0)(react@16.14.0)(search-insights@2.13.0)

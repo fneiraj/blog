@@ -1,5 +1,5 @@
 export const SITE = {
-  website: "https://mac.local.fneira.dev",
+  website: "https://fneira.dev",
   author: "Fernando Neira",
   desc: "Personal blog",
   repo: "https://github.com/fneiraj/blog",
