@@ -79,7 +79,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "prettier --write . && git add -A ."
+      "pre-commit": "prettier --check . --plugin=prettier-plugin-astro && git add -A ."
     }
   }
 }
