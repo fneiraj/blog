@@ -1,0 +1,21 @@
+---
+import { type CollectionEntry } from 'astro:content'
+
+export interface Props {
+  relatedPosts: CollectionEntry<"blog">[]
+}
+
+const {relatedPosts} = Astro.props
+---
+<div class="mt-5">
+<h2 class="text-xl">Post relacionados</h2>
+<ul>
+  {relatedPosts?.map((post: CollectionEntry<"blog">) => (
+    <li>
+      <a href={post.slug}>
+        {post.data.title}
+      </a>
+    </li>
+  ))}
+</ul>
+</div>

@@ -6,16 +6,18 @@ import Toc from '@components/toc/Toc.astro'
 import Header from '@components/posts/Header.astro'
 import Footer from '@components/posts/Footer.astro'
 import Giscus from '@components/posts/Giscus.astro'
+import RelatedPosts from '@components/posts/RelatedPosts.astro'
 import ScrollTopAndComments from '@components/posts/ScrollTopAndComments.astro'
 import { slugifyStr } from '@utils/slugify'
 
 export interface Props {
 	post: CollectionEntry<'blog'>
 	prevPost: CollectionEntry<'blog'>
-	nextPost: CollectionEntry<'blog'>
+	nextPost: CollectionEntry<'blog'>,
+	relatedPosts: CollectionEntry<'blog'>[]
 }
 
-const { post, prevPost, nextPost } = Astro.props
+const { post, prevPost, nextPost, relatedPosts } = Astro.props
 
 const { data } = post
 
@@ -52,6 +54,7 @@ const layoutProps = {
 }
 
 const date = pubDatetime
+
 ---
 
 <Layout {...layoutProps}>
@@ -74,6 +77,7 @@ const date = pubDatetime
 
 						<Giscus />
 						<Footer {nextPost} {prevPost} />
+						<RelatedPosts {relatedPosts} />
 					</div>
 				</div>
 			</article>
