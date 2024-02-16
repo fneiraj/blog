@@ -1,76 +1,85 @@
 ---
 export interface Props {
-	toc: any
+  toc: any;
 }
 
-const { toc } = Astro.props
+const { toc } = Astro.props;
 ---
 
-<div id='toc' class='hidden md:w-1/3 lg:block'>
-	<div class='mx-5bg-card text-card-foreground sticky top-[6em] rounded-lg border shadow-sm'>
-		<div class='flex flex-col space-y-1.5 p-6'>
-			<h3 class='text-center text-lg font-semibold leading-none tracking-tight'>
-				Tabla de contenido
-			</h3>
-		</div>
-		<hr />
-		<div class='flat-scrollbar-normal max-h-[80vh] overflow-y-auto p-6 px-2 py-2 pt-0'>
-			<ul>
-				{
-					toc?.map((item: any) => (
-						<a href={`#${item.slug}`}>
-							<li
-								class='py-2 text-sm hover:bg-gray-100 hover:dark:bg-gray-900'
-								style={`padding-left: ${item.depth - 1}em`}
-							>
-								{item.text}
-							</li>
-						</a>
-					))
-				}
-			</ul>
-		</div>
-	</div>
+<div id="toc" class="hidden md:w-1/3 lg:block">
+  <div
+    class="mx-5bg-card text-card-foreground sticky top-[6em] rounded-lg border shadow-sm"
+  >
+    <div class="flex flex-col space-y-1.5 p-6">
+      <h3 class="text-center text-lg font-semibold leading-none tracking-tight">
+        Tabla de contenido
+      </h3>
+    </div>
+    <hr />
+    <div
+      class="flat-scrollbar-normal max-h-[80vh] overflow-y-auto p-6 px-2 py-2 pt-0"
+    >
+      <ul>
+        {
+          toc?.map((item: any) => (
+            <a href={`#${item.slug}`}>
+              <li
+                class="py-2 text-sm hover:bg-gray-100 hover:dark:bg-gray-900"
+                style={`padding-left: ${item.depth - 1}em`}
+              >
+                {item.text}
+              </li>
+            </a>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
 </div>
 
 <style>
-	.active {
-		@apply border-sky-500 border-l-2 bg-gray-100 text-sky-700 dark:bg-gray-900 dark:text-sky-500;
-	}
+  .active {
+    @apply border-sky-500 border-l-2 bg-gray-100 text-sky-700 dark:bg-gray-900 dark:text-sky-500;
+  }
 </style>
 
 <script>
-	const initToc = () => {
-		const setCurrent: IntersectionObserverCallback = (entries) => {
-			for (let entry of entries) {
-				const { id } = entry.target
-				const tocHeadingEl = document.querySelector(`#toc a[href="#${id}"] li`)
-				if (!tocHeadingEl) return
-				if (entry.isIntersecting) {
-					document.querySelectorAll('#toc a li').forEach((e) => e.classList.remove('active'))
-					tocHeadingEl.classList.add('active')
-					//tocHeadingEl.scrollIntoView({ behavior: "smooth", block: "center" });
-				}
-			}
-		}
+  const initToc = () => {
+    const setCurrent: IntersectionObserverCallback = (entries) => {
+      for (let entry of entries) {
+        const { id } = entry.target;
+        const tocHeadingEl = document.querySelector(`#toc a[href="#${id}"] li`);
+        if (!tocHeadingEl) return;
+        if (entry.isIntersecting) {
+          document
+            .querySelectorAll("#toc a li")
+            .forEach((e) => e.classList.remove("active"));
+          tocHeadingEl.classList.add("active");
+          //tocHeadingEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    };
 
-		const observerOption: IntersectionObserverInit = {
-			rootMargin: '0px 0px -66%',
-			threshold: 1
-		}
+    const observerOption: IntersectionObserverInit = {
+      rootMargin: "0px 0px -66%",
+      threshold: 1,
+    };
 
-		const headingObserver = new IntersectionObserver(setCurrent, observerOption)
+    const headingObserver = new IntersectionObserver(
+      setCurrent,
+      observerOption,
+    );
 
-		document
-			.querySelectorAll('article :is(h2,h3,h4)')
-			.forEach((heading) => headingObserver.observe(heading))
-	}
+    document
+      .querySelectorAll("article :is(h2,h3,h4)")
+      .forEach((heading) => headingObserver.observe(heading));
+  };
 
-	document.addEventListener(
-		'astro:page-load',
-		() => {
-			initToc()
-		},
-		{ once: false }
-	)
+  document.addEventListener(
+    "astro:page-load",
+    () => {
+      initToc();
+    },
+    { once: false },
+  );
 </script>

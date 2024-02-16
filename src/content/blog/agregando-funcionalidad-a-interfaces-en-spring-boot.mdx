@@ -70,9 +70,9 @@ public @interface ResourceProvider {
 
 la anotación será `@ResourceProvider` se usará para marcar las interfaces que deben ser capturadas
 
-  `@Target(ElementType.TYPE)`: esto define el tipo de target al que apunta la anotación, aquí definimos si queremos que se use a nivel de clase (type), metodo, campo, etc. 
-  
-  `@Retention(RetentionPolicy.RUNTIME)`: esto define la politica de retencion de la anotación, hay 3 valores: `RetentionPolicy.SOURCE`, `RetentionPolicy.CLASS`, `RetentionPolicy.RUNTIME`, nosotros usaremos RUNTIME ya que será usada en tiempo de ejecución
+`@Target(ElementType.TYPE)`: esto define el tipo de target al que apunta la anotación, aquí definimos si queremos que se use a nivel de clase (type), metodo, campo, etc.
+
+`@Retention(RetentionPolicy.RUNTIME)`: esto define la politica de retencion de la anotación, hay 3 valores: `RetentionPolicy.SOURCE`, `RetentionPolicy.CLASS`, `RetentionPolicy.RUNTIME`, nosotros usaremos RUNTIME ya que será usada en tiempo de ejecución
 
 ### Creando una interfaz con la anotación que creamos
 
@@ -91,7 +91,6 @@ public interface IMyResourceProvider {
 ```
 
 Como se puede ver es una interfaz simple con un método que retorna un string y se decora con nuestra anotación.
-
 
 ### Realizando prueba
 
@@ -328,7 +327,6 @@ public class ResourceProviderBeanDefinitionRegistryPostProcessor
 }
 ```
 
-
 Agregamos dos metodos
 
 `getBeanDefinition`: es el encargado de escanear el classpath y buscar las interfaces decoradas con @ResourceProvider
@@ -381,7 +379,7 @@ public @interface ResourceValue {
 }
 ```
 
-en este caso el target sera: `@Target(ElementType.METHOD)` ya que queremos aplicar este decorador solo a los metodos, no a las clases ni interfaces. 
+en este caso el target sera: `@Target(ElementType.METHOD)` ya que queremos aplicar este decorador solo a los metodos, no a las clases ni interfaces.
 
 la anotación tiene dos campos obligatorios: `key` y `source` que son necesarios para la implementación
 
@@ -531,7 +529,6 @@ public class ResourceProviderHandler implements MethodInterceptor {
 ```
 
 esta clase es la encargada de interceptar las ejecuciones de nuestro proxy esto lo hace implementando la clase MethodInterceptor y sobreescribiendo el metodo intercept, aqui ya podemos inyectar otras dependencias
-
 
 ahora toca crear `InterfaceProxyFactoryBean.java` que es la encargara de la creación del proxy
 
@@ -687,13 +684,11 @@ y listo esta funcionando, ahora solo queda aplicar nuestra shica en `ResourcePro
 
 ### Resumen
 
-- Creamos la anotación `@ResourceProvider` para marcar las interfaces que queremos que se cree un proxy y se inyecte el bean al contexto de spring, de manera automatica, 
+- Creamos la anotación `@ResourceProvider` para marcar las interfaces que queremos que se cree un proxy y se inyecte el bean al contexto de spring, de manera automatica,
 - Creamos la anotación `@ResourceValue` para proveer de valores a los metodos dentro de la interfaz de manera de crear una implementaciones dinamicas.
 - Creamos una clase de tipo `BeanFactory` que es la fabrica de nuestras interfaces y la encargada de crear el proxy
 
 Si quieres hacer esto mas dinamico aún, como crear mas de una anotación y distintos handlers para cada una, puedes ver un ejemplo en mi Github: [fneiraj/JavaSpringExamples](https://github.com/fneiraj/JavaSpringExamples/tree/main/interfaceprocessor)
-
-
 
 ```sh {"Result":14-20}
 > Task :InterfaceProcessorApplication.main()

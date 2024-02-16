@@ -1,7 +1,7 @@
 ---
 title: "Comparar objetos sin toString() mediante assertEquals"
 description: "Como comparar los valores de objetos mediante el API de reflexión de Java"
-tag: 'Java'
+tag: "Java"
 pubDatetime: 2024-02-03T15:22:00Z
 slug: "assertequals-objectos-sin-tostring"
 ---

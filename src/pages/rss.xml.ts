@@ -1,6 +1,6 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
-import {getSortedPosts} from "@utils/getSortedContent";
+import { getSortedPosts } from "@utils/getSortedContent";
 import { SITE } from "@config";
 
 export async function GET() {

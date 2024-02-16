@@ -1,21 +1,21 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content'
-import SnippetDetails from '@layouts/SnippetDetails.astro'
+import { type CollectionEntry, getCollection } from "astro:content";
+import SnippetDetails from "@layouts/SnippetDetails.astro";
 
 export interface Props {
-	snippet: CollectionEntry<'snippet'>
+  snippet: CollectionEntry<"snippet">;
 }
 
 export async function getStaticPaths() {
-	const snippets = await getCollection('snippet', ({ data }) => !data.draft)
+  const snippets = await getCollection("snippet", ({ data }) => !data.draft);
 
-	return snippets.map((snippet) => ({
-		params: { slug: snippet.slug },
-		props: { snippet }
-	}))
+  return snippets.map((snippet) => ({
+    params: { slug: snippet.slug },
+    props: { snippet },
+  }));
 }
 
-const { snippet } = Astro.props
+const { snippet } = Astro.props;
 ---
 
 <SnippetDetails snippet={snippet} />

@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import {snippetFilter, postFilter} from "./contentFilter";
+import { snippetFilter, postFilter } from "./contentFilter";
 
 export const getSortedPosts = (posts: CollectionEntry<"blog">[]) => {
   return posts
@@ -7,11 +7,11 @@ export const getSortedPosts = (posts: CollectionEntry<"blog">[]) => {
     .sort(
       (a, b) =>
         Math.floor(
-          new Date(b.data.modDatetime ?? b.data.pubDatetime).getTime() / 1000
+          new Date(b.data.modDatetime ?? b.data.pubDatetime).getTime() / 1000,
         ) -
         Math.floor(
-          new Date(a.data.modDatetime ?? a.data.pubDatetime).getTime() / 1000
-        )
+          new Date(a.data.modDatetime ?? a.data.pubDatetime).getTime() / 1000,
+        ),
     );
 };
 
@@ -21,10 +21,10 @@ export const getSortedSnippets = (snippets: CollectionEntry<"snippet">[]) => {
     .sort(
       (a, b) =>
         Math.floor(
-          new Date(b.data.modDatetime ?? b.data.pubDatetime).getTime() / 1000
+          new Date(b.data.modDatetime ?? b.data.pubDatetime).getTime() / 1000,
         ) -
         Math.floor(
-          new Date(a.data.modDatetime ?? a.data.pubDatetime).getTime() / 1000
-        )
+          new Date(a.data.modDatetime ?? a.data.pubDatetime).getTime() / 1000,
+        ),
     );
 };

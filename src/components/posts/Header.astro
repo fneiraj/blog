@@ -1,59 +1,59 @@
 ---
-import { slugifyStr } from '@utils/slugify'
-import Tag from '@components/Tag.astro'
+import { slugifyStr } from "@utils/slugify";
+import Tag from "@components/Tag.astro";
 
 export interface Props {
-	title: string
-	tags: string[]
-	date: Date
-	minutesRead: string
+  title: string;
+  tags: string[];
+  date: Date;
+  minutesRead: string;
 }
 
-const { title, tags, date, minutesRead } = Astro.props
+const { title, tags, date, minutesRead } = Astro.props;
 
 const postDateTemplate: Intl.DateTimeFormatOptions = {
-	year: 'numeric',
-	month: 'long',
-	day: 'numeric'
-}
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
 ---
 
 <header>
-	<div class='dark:border-gray space-y-1 border-b border-gray-200 pb-10'>
-		<div class='space-y-6 text-center'>
-			<h1
-				transition:name={slugifyStr(title)}
-				class='text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14'
-			>
-				{title}
-			</h1>
-			<div class='flex flex-wrap'>
-				{tags.map((tag) => <Tag text={tag} />)}
-			</div>
-			<dl>
-				<div>
-					<dt class='sr-only'>Published on</dt>
-					<dd
-						transition:name={slugifyStr(title + '-date')}
-						class='flex-column flex gap-1 font-semibold text-gray-500 dark:text-gray-400'
-					>
-						<time datetime={date.toString()} class='flex items-center'>
-							📆
-							<span class='ml-1 md:ml-2'>
-								{' '}
-								{new Date(date).toLocaleDateString('es-CL', postDateTemplate)}
-							</span>
-						</time>
-						<span class='mx-2'>{` • `}</span>
-						<div class='flex items-center'>
-							🕒
-							<span class='ml-1.5 md:ml-2'
-								>{minutesRead.replace('min', 'mins').replace('read', '')}</span
-							>
-						</div>
-					</dd>
-				</div>
-			</dl>
-		</div>
-	</div>
+  <div class="dark:border-gray space-y-1 border-b border-gray-200 pb-10">
+    <div class="space-y-6 text-center">
+      <h1
+        transition:name={slugifyStr(title)}
+        class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14"
+      >
+        {title}
+      </h1>
+      <div class="flex flex-wrap">
+        {tags.map((tag) => <Tag text={tag} />)}
+      </div>
+      <dl>
+        <div>
+          <dt class="sr-only">Published on</dt>
+          <dd
+            transition:name={slugifyStr(title + "-date")}
+            class="flex-column flex gap-1 font-semibold text-gray-500 dark:text-gray-400"
+          >
+            <time datetime={date.toString()} class="flex items-center">
+              📆
+              <span class="ml-1 md:ml-2">
+                {" "}
+                {new Date(date).toLocaleDateString("es-CL", postDateTemplate)}
+              </span>
+            </time>
+            <span class="mx-2">{` • `}</span>
+            <div class="flex items-center">
+              🕒
+              <span class="ml-1.5 md:ml-2"
+                >{minutesRead.replace("min", "mins").replace("read", "")}</span
+              >
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
 </header>

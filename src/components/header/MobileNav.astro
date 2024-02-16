@@ -1,71 +1,71 @@
 ---
-import { Icon } from 'astro-icon/components'
-import { HEADER_NAV_LINKS } from '@config'
+import { Icon } from "astro-icon/components";
+import { HEADER_NAV_LINKS } from "@config";
 ---
 
-<button id='openNav' aria-label='Open Menu' class='sm:hidden'>
-	<Icon name='menu' class='h-8 w-8 text-gray-900 dark:text-gray-100' />
+<button id="openNav" aria-label="Open Menu" class="sm:hidden">
+  <Icon name="menu" class="h-8 w-8 text-gray-900 dark:text-gray-100" />
 </button>
 <div
-	id='nav-menu'
-	class={`fixed left-0 top-0 z-10 h-full w-full transform bg-white opacity-95 duration-300 ease-in-out dark:bg-gray-950 dark:opacity-[0.98] translate-x-full`}
+  id="nav-menu"
+  class={`fixed left-0 top-0 z-10 h-full w-full transform bg-white opacity-95 duration-300 ease-in-out dark:bg-gray-950 dark:opacity-[0.98] translate-x-full`}
 >
-	<div class='flex justify-end'>
-		<button id='closeNav' class='mr-8 mt-11' aria-label='Close Menu'>
-			<Icon name='x' class='h-8 w-8 text-gray-900 dark:text-gray-100' />
-		</button>
-	</div>
-	<nav class='fixed mt-8 h-full'>
-		{
-			HEADER_NAV_LINKS.map((link) => (
-				<div class='px-12 py-4'>
-					<a
-						href={link.href}
-						class='text-2xl font-bold tracking-widest text-gray-900 dark:text-gray-100'
-					>
-						{link.title}
-					</a>
-				</div>
-			))
-		}
-		<div class='px-12 py-4'>
-			<button
-				id='mobile-search-btn'
-				class='text-2xl font-bold tracking-widest text-gray-900 dark:text-gray-100'
-			>
-				Buscar
-			</button>
-		</div>
-	</nav>
+  <div class="flex justify-end">
+    <button id="closeNav" class="mr-8 mt-11" aria-label="Close Menu">
+      <Icon name="x" class="h-8 w-8 text-gray-900 dark:text-gray-100" />
+    </button>
+  </div>
+  <nav class="fixed mt-8 h-full">
+    {
+      HEADER_NAV_LINKS.map((link) => (
+        <div class="px-12 py-4">
+          <a
+            href={link.href}
+            class="text-2xl font-bold tracking-widest text-gray-900 dark:text-gray-100"
+          >
+            {link.title}
+          </a>
+        </div>
+      ))
+    }
+    <div class="px-12 py-4">
+      <button
+        id="mobile-search-btn"
+        class="text-2xl font-bold tracking-widest text-gray-900 dark:text-gray-100"
+      >
+        Buscar
+      </button>
+    </div>
+  </nav>
 </div>
 
 <script>
-	function toggleNav() {
-		const openNavBtn = document.querySelector('#openNav')
-		const closeNavBtn = document.querySelector('#closeNav')
-		const navItem = document.querySelector('#nav-menu')
-		const searchBtn = document.querySelector('#mobile-search-btn')
+  function toggleNav() {
+    const openNavBtn = document.querySelector("#openNav");
+    const closeNavBtn = document.querySelector("#closeNav");
+    const navItem = document.querySelector("#nav-menu");
+    const searchBtn = document.querySelector("#mobile-search-btn");
 
-		closeNavBtn?.addEventListener('click', () => {
-			document.body.style.overflow = 'hidden'
-			navItem?.classList.toggle('translate-x-0')
-			navItem?.classList.toggle('translate-x-full')
-		})
+    closeNavBtn?.addEventListener("click", () => {
+      document.body.style.overflow = "hidden";
+      navItem?.classList.toggle("translate-x-0");
+      navItem?.classList.toggle("translate-x-full");
+    });
 
-		searchBtn?.addEventListener('click', () => {
-			document.body.style.overflow = 'hidden'
-			navItem?.classList.toggle('translate-x-0')
-			navItem?.classList.toggle('translate-x-full')
-		})
+    searchBtn?.addEventListener("click", () => {
+      document.body.style.overflow = "hidden";
+      navItem?.classList.toggle("translate-x-0");
+      navItem?.classList.toggle("translate-x-full");
+    });
 
-		openNavBtn?.addEventListener('click', () => {
-			document.body.style.overflow = 'auto'
-			navItem?.classList.toggle('translate-x-full')
-			navItem?.classList.toggle('translate-x-0')
-		})
-	}
+    openNavBtn?.addEventListener("click", () => {
+      document.body.style.overflow = "auto";
+      navItem?.classList.toggle("translate-x-full");
+      navItem?.classList.toggle("translate-x-0");
+    });
+  }
 
-	toggleNav()
+  toggleNav();
 
-	document.addEventListener('astro:after-swap', toggleNav)
+  document.addEventListener("astro:after-swap", toggleNav);
 </script>

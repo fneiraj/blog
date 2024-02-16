@@ -23,24 +23,27 @@ function setPreference() {
   reflectPreference();
 }
 
-function changeGiscusTheme () {
+function changeGiscusTheme() {
   function sendMessage(message) {
-    const iframe = document.querySelector('iframe.giscus-frame');
+    const iframe = document.querySelector("iframe.giscus-frame");
     if (!iframe) return;
-    iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+    iframe.contentWindow.postMessage({ giscus: message }, "https://giscus.app");
   }
 
   sendMessage({
     setConfig: {
-      theme: themeValue
-    }
+      theme: themeValue,
+    },
   });
 }
 
 function reflectPreference() {
   document.firstElementChild.setAttribute("class", themeValue);
   document.firstElementChild.setAttribute("data-theme", themeValue);
-  document.firstElementChild.setAttribute("style", "color-scheme: "+ themeValue);
+  document.firstElementChild.setAttribute(
+    "style",
+    "color-scheme: " + themeValue,
+  );
 
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 
@@ -61,7 +64,7 @@ function reflectPreference() {
       ?.setAttribute("content", bgColor);
   }
 
-  changeGiscusTheme()
+  changeGiscusTheme();
 }
 
 // set early so no page flashes / CSS is made aware

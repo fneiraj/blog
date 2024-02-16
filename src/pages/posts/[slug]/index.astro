@@ -1,34 +1,34 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content'
-import PostDetails from '@layouts/PostDetails.astro'
-import { getRelatedPosts } from '@utils/getRelatedPosts'
+import { type CollectionEntry, getCollection } from "astro:content";
+import PostDetails from "@layouts/PostDetails.astro";
+import { getRelatedPosts } from "@utils/getRelatedPosts";
 
 export interface Props {
-	post: CollectionEntry<'blog'>
-	prevPost: CollectionEntry<'blog'>
-	nextPost: CollectionEntry<'blog'>,
-	relatedPosts: CollectionEntry<'blog'>[]
+  post: CollectionEntry<"blog">;
+  prevPost: CollectionEntry<"blog">;
+  nextPost: CollectionEntry<"blog">;
+  relatedPosts: CollectionEntry<"blog">[];
 }
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog', ({ data }) => !data.draft)
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-	const numberOfPosts = posts.length
+  const numberOfPosts = posts.length;
 
-	const postResult = posts.map((post, i) => ({
-		params: { slug: post.slug },
-		props: {
-			post,
-			prevPost: i + 1 === numberOfPosts ? undefined : posts[i + 1],
-			nextPost: i === 0 ? undefined : posts[i - 1],
-			relatedPosts: getRelatedPosts(posts, post),
-		}
-	}))
+  const postResult = posts.map((post, i) => ({
+    params: { slug: post.slug },
+    props: {
+      post,
+      prevPost: i + 1 === numberOfPosts ? undefined : posts[i + 1],
+      nextPost: i === 0 ? undefined : posts[i - 1],
+      relatedPosts: getRelatedPosts(posts, post),
+    },
+  }));
 
-	return [...postResult]
+  return [...postResult];
 }
 
-const { post, prevPost, nextPost, relatedPosts } = Astro.props
+const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 ---
 
 <PostDetails {post} {prevPost} {nextPost} {relatedPosts} />

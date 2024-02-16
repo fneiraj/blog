@@ -2,39 +2,42 @@
 import { slugifyStr } from "@utils/slugify";
 
 export interface Props {
-  text: string
-  count?: number
-  isSelected?: boolean
+  text: string;
+  count?: number;
+  isSelected?: boolean;
 }
 
 const { text, count, isSelected } = Astro.props;
 
 const className =
-    'mr-3 mt-3 overflow-hidden rounded-lg border border-primary-500 text-xl text-primary-500 duration-300 hover:bg-primary-500 hover:text-gray-100 dark:hover:text-gray-900'
+  "mr-3 mt-3 overflow-hidden rounded-lg border border-primary-500 text-xl text-primary-500 duration-300 hover:bg-primary-500 hover:text-gray-100 dark:hover:text-gray-900";
 
-  const selectedClassName =
-    'mr-3 mt-3 overflow-hidden rounded-lg border border-primary-500 text-xl duration-300 bg-primary-500 hover:text-gray-100 dark:hover:text-gray-900'
+const selectedClassName =
+  "mr-3 mt-3 overflow-hidden rounded-lg border border-primary-500 text-xl duration-300 bg-primary-500 hover:text-gray-100 dark:hover:text-gray-900";
 
-  const link = isSelected ? `/blog` : `/blog/tags/${text}`
-
+const link = isSelected ? `/blog` : `/blog/tags/${text}`;
 ---
 
-{count ? (
-  <span transition:name={slugifyStr(text)} class={isSelected ? selectedClassName : className}>
-    <a href={link}>
-      <span class="text-hans-100 p-2">{text.toUpperCase()}</span>
-      <span class={'dark:text-hans-400 bg-primary-500 p-2 text-white'}>{count}</span>
-    </a>
-  </span>
-)
-:
-(
+{
+  count ? (
+    <span
+      transition:name={slugifyStr(text)}
+      class={isSelected ? selectedClassName : className}
+    >
+      <a href={link}>
+        <span class="text-hans-100 p-2">{text.toUpperCase()}</span>
+        <span class={"dark:text-hans-400 bg-primary-500 p-2 text-white"}>
+          {count}
+        </span>
+      </a>
+    </span>
+  ) : (
     <a
-      transition:name={slugifyStr(text)} 
+      transition:name={slugifyStr(text)}
       href={link}
       class="mr-3 mt-2 rounded-lg border border-primary-500 px-3 py-1 text-sm font-medium uppercase text-primary-500 transition duration-500 ease-in-out hover:bg-primary-500 hover:text-gray-100 dark:hover:text-gray-900"
     >
       {text}
     </a>
-  ) 
+  )
 }

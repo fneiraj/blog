@@ -1,6 +1,6 @@
 // @ts-check-file
-const { fontFamily } = require('tailwindcss/defaultTheme')
-const colors = require('tailwindcss/colors')
+const { fontFamily } = require("tailwindcss/defaultTheme");
+const colors = require("tailwindcss/colors");
 
 function withOpacity(variableName) {
   return ({ opacityValue }) => {
@@ -13,17 +13,17 @@ function withOpacity(variableName) {
 /** @type {import("tailwindcss/types").Config } */
 module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
-  darkMode: 'class',
+  darkMode: "class",
   theme: {
     extend: {
       lineHeight: {
-        11: '2.75rem',
-        12: '3rem',
-        13: '3.25rem',
-        14: '3.5rem',
+        11: "2.75rem",
+        12: "3rem",
+        13: "3.25rem",
+        14: "3.5rem",
       },
       fontFamily: {
-        sans: ['Space_Grotesk', ...fontFamily.sans],
+        sans: ["Space_Grotesk", ...fontFamily.sans],
       },
       colors: {
         primary: colors.blue,
@@ -33,35 +33,35 @@ module.exports = {
         DEFAULT: {
           css: {
             a: {
-              color: theme('colors.primary.500'),
-              '&:hover': {
-                color: `${theme('colors.primary.600')}`,
+              color: theme("colors.primary.500"),
+              "&:hover": {
+                color: `${theme("colors.primary.600")}`,
               },
-              code: { color: theme('colors.primary.400') },
+              code: { color: theme("colors.primary.400") },
             },
-            'h1,h2': {
-              fontWeight: '700',
-              letterSpacing: theme('letterSpacing.tight'),
+            "h1,h2": {
+              fontWeight: "700",
+              letterSpacing: theme("letterSpacing.tight"),
             },
             h3: {
-              fontWeight: '600',
+              fontWeight: "600",
             },
             code: {
-              color: theme('colors.indigo.500'),
+              color: theme("colors.indigo.500"),
             },
           },
         },
         invert: {
           css: {
             a: {
-              color: theme('colors.primary.500'),
-              '&:hover': {
-                color: `${theme('colors.primary.400')}`,
+              color: theme("colors.primary.500"),
+              "&:hover": {
+                color: `${theme("colors.primary.400")}`,
               },
-              code: { color: theme('colors.primary.400') },
+              code: { color: theme("colors.primary.400") },
             },
-            'h1,h2,h3,h4,h5,h6': {
-              color: theme('colors.gray.100'),
+            "h1,h2,h3,h4,h5,h6": {
+              color: theme("colors.gray.100"),
             },
           },
         },
@@ -71,26 +71,26 @@ module.exports = {
         typing: {
           "0%": {
             width: "0%",
-            visibility: "hidden"
+            visibility: "hidden",
           },
           "100%": {
-            width: "100%"
-          }
+            width: "100%",
+          },
         },
         blink: {
           "50%": {
-            borderColor: "transparent"
+            borderColor: "transparent",
           },
           "100%": {
             borderColor: "black",
             dark: {
-              borderColor: "white"
+              borderColor: "white",
             },
-          }
-        }
+          },
+        },
       },
       animation: {
-        typing: "typing 2s steps(20), blink 1s infinite"
+        typing: "typing 2s steps(20), blink 1s infinite",
       },
 
       //astro-paper
@@ -129,8 +129,7 @@ module.exports = {
         },
         transparent: "transparent",
       },
-    
     },
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
-}
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
+};

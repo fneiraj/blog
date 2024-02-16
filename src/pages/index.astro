@@ -1,9 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import {getSortedPosts} from "@utils/getSortedContent";
-import LatestPosts from '@components/main/LatestPosts.astro'
-import ViewAllPosts from '@components/main/ViewAllPosts.astro'
+import { getSortedPosts } from "@utils/getSortedContent";
+import LatestPosts from "@components/main/LatestPosts.astro";
+import ViewAllPosts from "@components/main/ViewAllPosts.astro";
 
 const posts = await getCollection("blog");
 

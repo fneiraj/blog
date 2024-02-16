@@ -14,7 +14,7 @@ const blog = defineCollection({
       disableToc: z.boolean().default(false),
       tags: z.array(z.string()).default(["others"]),
       ogImage: image()
-        .refine(img => img.width >= 1200 && img.height >= 630, {
+        .refine((img) => img.width >= 1200 && img.height >= 630, {
           message: "OpenGraph image must be at least 1200 X 630 pixels!",
         })
         .or(z.string())
@@ -34,7 +34,7 @@ const snippet = defineCollection({
       draft: z.boolean().optional(),
       tag: z.string(),
       ogImage: image()
-        .refine(img => img.width >= 1200 && img.height >= 630, {
+        .refine((img) => img.width >= 1200 && img.height >= 630, {
           message: "OpenGraph image must be at least 1200 X 630 pixels!",
         })
         .or(z.string())

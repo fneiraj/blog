@@ -4,19 +4,22 @@ import { generateOgImageForSnippet } from "@utils/generateOgImages";
 import { slugifyStr } from "@utils/slugify";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("snippet").then(p =>
-    p.filter(({ data }) => !data.draft && !data.ogImage)
+  const posts = await getCollection("snippet").then((p) =>
+    p.filter(({ data }) => !data.draft && !data.ogImage),
   );
 
-  console.log(slugifyStr(posts[0].slug))
+  console.log(slugifyStr(posts[0].slug));
 
-  return posts.map(post => ({
+  return posts.map((post) => ({
     params: { slug: slugifyStr(post.slug) },
     props: post,
   }));
 }
 
 export const GET: APIRoute = async ({ props }) =>
-  new Response(await generateOgImageForSnippet(props as CollectionEntry<"snippet">), {
-    headers: { "Content-Type": "image/png" },
-  });
+  new Response(
+    await generateOgImageForSnippet(props as CollectionEntry<"snippet">),
+    {
+      headers: { "Content-Type": "image/png" },
+    },
+  );
