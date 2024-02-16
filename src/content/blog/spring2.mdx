@@ -1,0 +1,719 @@
+---
+pubDatetime: 2024-02-03T15:22:00Z
+modDatetime: 2024-02-04T09:12:47.400Z
+title: spring2
+slug: spring2
+featured: true
+draft: false
+tags:
+  - springboot
+  - cglib
+  - java
+  - proxy
+description: Como agregar funcionalidad a interfaces mediante proxy en spring boot
+---
+
+### ¿Haz usado Feign para crear un cliente http?
+
+Te habras dado cuenta que solo necesitas crear una interfaz y decorarla con la anotacion `@FeingClient`, con esto Feign hace la implementación de manera magica sin necesidad de nosotros escribir código o implementar dicha esa interfaz.
+
+### ¿Como puedo hacer algo similar?
+
+En este post explicare como crear una anotación personalizada con la que poder dar funcionalidad a interfaces sin necesidad de implementar dicha interfaz, esto lo shraremos con Proxies utilizando cglib (que ya viene incluida en springboot)
+
+---
+
+### ¿Que es un Proxy?
+
+> Proxy es un patrón de diseño estructural que proporciona un objeto que actúa como sustituto de un objeto de servicio real utilizado por un cliente. Un proxy recibe solicitudes del cliente, realiza parte del trabajo (control de acceso, almacenamiento en caché, etc.) y después pasa la solicitud a un objeto de servicio
+>
+> [Proxy en Java / Patrones de diseño. (2014). Refactoring.guru](https://refactoring.guru/es/design-patterns/proxy/java/example).
+
+### ¿Que es Cglib?
+
+Cglib es una libreria que permite generar y transformar bytecode de Java en tiempo de ejecución, gracias a esta libreria podemos crear la implementación de las interfaces en tiempo de ejecución y agregar nuestra funcionalidad requerida.
+
+---
+
+## Guia
+
+Bueno, luego de explicar a grandes razgos eso vamos a explicar como podemos realizar nuestra propia anotacion y implementación.
+
+### Creando un proyecto nuevo
+
+Cree un proyecto nuevo solo agregando la dependencia base de springboot
+
+```groovy
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+}
+```
+
+### Creando la anotación para decorar las interfaces
+
+Ahora procedemos a crear nuestra anotación que marcara las interfaces que debemos capturar y agregar el proxy.
+
+```java
+package dev.fneira.interfaceprocessor.resourceprovider;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ResourceProvider {
+}
+
+```
+
+la anotación será `@ResourceProvider` se usará para marcar las interfaces que deben ser capturadas
+
+  `@Target(ElementType.TYPE)`: esto define el tipo de target al que apunta la anotación, aquí definimos si queremos que se use a nivel de clase (type), metodo, campo, etc. 
+  
+  `@Retention(RetentionPolicy.RUNTIME)`: esto define la politica de retencion de la anotación, hay 3 valores: `RetentionPolicy.SOURCE`, `RetentionPolicy.CLASS`, `RetentionPolicy.RUNTIME`, nosotros usaremos RUNTIME ya que será usada en tiempo de ejecución
+
+### Creando una interfaz con la anotación que creamos
+
+vamos a crearemos una interfaz que este decorada con la anotación `@ResourceProvider`
+
+```java title="IMyResourceProvider.java"
+package dev.fneira.interfaceprocessor.interfaces;
+
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider;
+
+@ResourceProvider
+public interface IMyResourceProvider {
+  String getResource();
+}
+
+```
+
+Como se puede ver es una interfaz simple con un método que retorna un string y se decora con nuestra anotación.
+
+
+### Realizando prueba
+
+Intentemos inyectar esta interfaz en el main con un `@Autowired`:
+
+```java title="InterfaceProcessorApplication.java"
+package dev.fneira.interfaceprocessor;
+
+import dev.fneira.interfaceprocessor.interfaces.IMyResourceProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class InterfaceProcessorApplication implements CommandLineRunner {
+
+  private final IMyResourceProvider myResourceProvider;
+
+  @Autowired
+  public InterfaceProcessorApplication(final IMyResourceProvider myResourceProvider) {
+    this.myResourceProvider = myResourceProvider;
+  }
+
+  public static void main(final String[] args) {
+    SpringApplication.run(InterfaceProcessorApplication.class, args);
+  }
+
+  @Override
+  public void run(final String... args) throws Exception {
+    System.out.println(myResourceProvider.getResource());
+  }
+}
+
+```
+
+en este caso implemente la clase CommandLineRunner para poder ejecutar de manera directa el metodo `getResource()` de mi interfaz.
+
+si lo ejecutamos obtendremos un error de spring ya que no puede encontrar un bean para la interfaz IMyResourceProvider:
+
+```sh
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field myResourceProvider in dev.fneira.interfaceprocessor.InterfaceProcessorApplication required a bean of type 'dev.fneira.interfaceprocessor.interfaces.IMyResourceProvider' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+```
+
+### Agregando el bean `IMyResourceProvider` al contenedor de spring
+
+creamos la clase que se encarga de agregar el bean de la interfaz al contenedor de spring y inyectarle funcionalidad con cglib
+
+```java title="BeanDefinitionRegistryPostProcessor.java"
+package dev.fneira.interfaceprocessor.imp;
+
+import dev.fneira.interfaceprocessor.interfaces.IMyResourceProvider;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class ResourceProviderBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
+
+  @Override
+  public void postProcessBeanDefinitionRegistry(final BeanDefinitionRegistry registry) {
+    final BeanDefinitionBuilder builder =
+        BeanDefinitionBuilder.genericBeanDefinition(
+            IMyResourceProvider.class, () -> createProxy(IMyResourceProvider.class));
+    final BeanDefinition beanDefinition = builder.getRawBeanDefinition();
+    registry.registerBeanDefinition("myResourceProviderProxy", beanDefinition);
+  }
+
+  private <T> T createProxy(final Class<T> targetClass) {
+    final Enhancer enhancer = new Enhancer();
+    enhancer.setSuperclass(targetClass);
+    enhancer.setCallback(
+        (MethodInterceptor)
+            (obj, method, args, proxy) ->
+                targetClass.getSimpleName() + "." + method.getName() + " -> Hello from CGLIB!");
+
+    return (T) enhancer.create();
+  }
+}
+
+```
+
+Creamos la clase que implementa `BeanDefinitionRegistryPostProcessor`, aqui sobreescribir el método postProcessBeanDefinitionRegistry: es el metodo que permite modificar el registro de definición de bean interno del contexto de la aplicación después de su inicialización estándar. Se habrán cargado todas las definiciones de beans normales, pero todavía no se habrá creado una instancia de ningún bean. Esto permite agregar más definiciones de beans antes de que comience la siguiente fase de posprocesamiento.
+
+también tenemos el método `createProxy` que es donde creamos el proxy para nuestra interfaz y le damos funcionalidad, en este caso retorna un String con el nombre de la clase y el nombre del metodo.
+
+### Realizando prueba
+
+ahora si lo ejecutamos vemos que tenemos el valor que le declaramos en nuestro proxy
+
+```sh
+> Task :InterfaceProcessorApplication.main()
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.2)
+
+2024-02-05T21:06:46.750-03:00  INFO 26335 --- [           main] d.f.i.InterfaceProcessorApplication      : Starting InterfaceProcessorApplication using Java 17.0.3 with PID 26335 (/Users/fernando/Downloads/bsh/interfaceprocessor/build/classes/java/main started by fernando in /Users/fernando/Downloads/bsh)
+2024-02-05T21:06:46.752-03:00  INFO 26335 --- [           main] d.f.i.InterfaceProcessorApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-02-05T21:06:46.938-03:00  WARN 26335 --- [           main] o.s.c.a.ConfigurationClassPostProcessor  : Cannot enhance @Configuration bean definition 'resourceProviderBeanDefinitionRegistryPostProcessor' since its singleton instance has been created too early. The typical cause is a non-static @Bean method with a BeanDefinitionRegistryPostProcessor return type: Consider declaring such methods as 'static' and/or marking the containing configuration class as 'proxyBeanMethods=false'.
+2024-02-05T21:06:47.068-03:00  INFO 26335 --- [           main] d.f.i.InterfaceProcessorApplication      : Started InterfaceProcessorApplication in 0.524 seconds (process running for 0.676)
+IMyResourceProvider.getResource -> Hello from CGLIB!
+```
+
+ya estamos generando un bean para nuestra interfaz y agregando funcionalidad mediante un proxy con Cglib.
+
+### Creando mas interfaces
+
+¿Pero que pasa si creamos otra interfaz?
+
+```java title="IMyResource2Provider.java"
+package dev.fneira.interfaceprocessor.interfaces;
+
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider;
+
+@ResourceProvider
+public interface IMyResource2Provider {
+
+  String getResource();
+}
+
+```
+
+la agregamos a nuestra clase main y ejecutamos:
+
+```sh
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 1 of constructor in dev.fneira.interfaceprocessor.InterfaceProcessorApplication required a bean of type 'dev.fneira.interfaceprocessor.interfaces.IMyResource2Provider' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'dev.fneira.interfaceprocessor.interfaces.IMyResource2Provider' in your configuration.
+```
+
+vemos que falla, porque ahora no encuentra nuesto bean para IMyResource2Provider, ya que de la forma que lo definimos no queda dinamico detectando las interfaces decoradas con @ResourceProvider y autogenerando los beans con su implementación.
+
+### Agregando beans de manera dinamica
+
+para solucionar esto de forma dinamica y automatica, debemos modificar la clase ResourceProviderBeanDefinitionRegistryPostProcessor para que nos permita escanear el proyecto y buscar las interfaces decoradas con la anotacion @ResourceProvider:
+
+```java title="BeanDefinitionRegistryPostProcessor.java"
+package dev.fneira.interfaceprocessor.imp;
+
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+
+@Configuration
+public class ResourceProviderBeanDefinitionRegistryPostProcessor
+    implements BeanDefinitionRegistryPostProcessor {
+
+  @Override
+  public void postProcessBeanDefinitionRegistry(final BeanDefinitionRegistry registry) {
+    final String basePackage = "dev.fneira.interfaceprocessor";
+
+    final Set<BeanDefinition> beanDefinitions = getBeanDefinition(basePackage);
+
+    for (final BeanDefinition beanDefinition : beanDefinitions) {
+      String beanClassName = beanDefinition.getBeanClassName();
+      try {
+        Class<?> targetClass = Class.forName(beanClassName);
+        registerBeanForInterface(registry, targetClass);
+      } catch (ClassNotFoundException e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
+  private Set<BeanDefinition> getBeanDefinition(final String basePackage) {
+    final ClassPathScanningCandidateComponentProvider provider =
+        new ClassPathScanningCandidateComponentProvider(false) {
+          @Override
+          protected boolean isCandidateComponent(final AnnotatedBeanDefinition beanDefinition) {
+            return super.isCandidateComponent(beanDefinition)
+                || beanDefinition.getMetadata().isAbstract();
+          }
+        };
+
+    provider.addIncludeFilter(new AnnotationTypeFilter(ResourceProvider.class, true, true));
+
+    return provider.findCandidateComponents(basePackage);
+  }
+
+  private <T> void registerBeanForInterface(
+      final BeanDefinitionRegistry registry, final Class<T> targetClass) {
+    final BeanDefinitionBuilder builder =
+        BeanDefinitionBuilder.genericBeanDefinition(targetClass, () -> createProxy(targetClass));
+    final BeanDefinition beanDefinition = builder.getRawBeanDefinition();
+    registry.registerBeanDefinition(targetClass.getSimpleName() + "Proxy", beanDefinition);
+  }
+
+  private <T> T createProxy(final Class<T> targetClass) {
+    final Enhancer enhancer = new Enhancer();
+    enhancer.setSuperclass(targetClass);
+    enhancer.setCallback(
+        (MethodInterceptor)
+            (obj, method, args, proxy) ->
+                targetClass.getSimpleName() + "." + method.getName() + " -> Hello from CGLIB!");
+
+    return (T) enhancer.create();
+  }
+}
+```
+
+
+Agregamos dos metodos
+
+`getBeanDefinition`: es el encargado de escanear el classpath y buscar las interfaces decoradas con @ResourceProvider
+
+`registerBeanForInterface`: se encarga de crear el registrar la definicion del bean creando el proxy para la interfaz que viene en la variable `targetClass`
+
+ahora si ejecutamos obtendremos lo siguiente:
+
+```sh
+> Task :InterfaceProcessorApplication.main()
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.2)
+
+2024-02-05T21:10:49.924-03:00  INFO 26611 --- [           main] d.f.i.InterfaceProcessorApplication      : Starting InterfaceProcessorApplication using Java 17.0.3 with PID 26611 (/Users/fernando/Downloads/bsh/interfaceprocessor/build/classes/java/main started by fernando in /Users/fernando/Downloads/bsh)
+2024-02-05T21:10:49.926-03:00  INFO 26611 --- [           main] d.f.i.InterfaceProcessorApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-02-05T21:10:50.092-03:00  WARN 26611 --- [           main] o.s.c.a.ConfigurationClassPostProcessor  : Cannot enhance @Configuration bean definition 'resourceProviderBeanDefinitionRegistryPostProcessor' since its singleton instance has been created too early. The typical cause is a non-static @Bean method with a BeanDefinitionRegistryPostProcessor return type: Consider declaring such methods as 'static' and/or marking the containing configuration class as 'proxyBeanMethods=false'.
+2024-02-05T21:10:50.214-03:00  INFO 26611 --- [           main] d.f.i.InterfaceProcessorApplication      : Started InterfaceProcessorApplication in 0.485 seconds (process running for 0.656)
+IMyResourceProvider.getResource -> Hello from CGLIB!
+IMyResource2Provider.getResource -> Hello from CGLIB!
+```
+
+como se puede apreciar se shran inyectar ambas interfaces y cada una devuelve el String que definimos en el metodo createProxy()
+
+ahora podemos crear mas interfaces y todas se les agregara el proxy, pero que pasa si queremos generar mas de un metodo en las interfaces?, y tambien queremos agregarle valores dinamicos a cada metodo?
+
+### Creando anotación `@ResourceValue`
+
+Ahora creamos una anotación que marcara los metodos y poder agregar funcionalidad de manera dinamica a cada uno.
+
+```java title="ResourceValue.java"
+package dev.fneira.interfaceprocessor.resourceprovider;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface ResourceValue {
+  String key();
+
+  String source();
+}
+```
+
+en este caso el target sera: `@Target(ElementType.METHOD)` ya que queremos aplicar este decorador solo a los metodos, no a las clases ni interfaces. 
+
+la anotación tiene dos campos obligatorios: `key` y `source` que son necesarios para la implementación
+
+### Modificando interfaces
+
+Agregamos a las interfaces el decorador `@ResourceValue`
+
+```java title="IMyResourceProvider.java"
+package dev.fneira.interfaceprocessor.interfaces;
+
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider;
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceValue;
+
+@ResourceProvider
+public interface IMyResourceProvider {
+
+  @ResourceValue(key = "my-key-1", source = "datagrid")
+  String getResource();
+
+  @ResourceValue(key = "my-other-resource-key", source = "redis")
+  String getOtherResource();
+}
+```
+
+```java title="IMyResource2Provider.java"
+package dev.fneira.interfaceprocessor.interfaces;
+
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider;
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceValue;
+
+@ResourceProvider
+public interface IMyResource2Provider {
+
+  @ResourceValue(key = "os.name", source = "environment")
+  String getResource();
+}
+
+```
+
+en este caso tendre 3 fuentes: redis, datagrid y environment
+
+### Modificando metodo `createProxy`
+
+ahora debemos modificar el metodo createProxy de la clase postProcessBeanDefinitionRegistry para mostrar el los valores de la anotacion `@ResourceValue`:
+
+```java
+  private <T> T createProxy(final Class<T> targetClass) {
+    final Enhancer enhancer = new Enhancer();
+    enhancer.setSuperclass(targetClass);
+    enhancer.setCallback(
+        (MethodInterceptor)
+            (obj, method, args, proxy) -> {
+              final ResourceValue resourceValue = method.getAnnotation(ResourceValue.class);
+
+              return targetClass.getSimpleName()
+                  + "."
+                  + method.getName()
+                  + " -> "
+                  + resourceValue.key()
+                  + " - "
+                  + resourceValue.source();
+            });
+    return (T) enhancer.create();
+  }
+```
+
+mediante el api de `Reflection` de java podemos obtener la anotación del método ejecutado mediante el proxy y asi obtener sus valores
+
+si ejecutamos obtendremos lo siguiente:
+
+```sh
+> Task :InterfaceProcessorApplication.main()
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.2)
+
+2024-02-05T21:18:31.302-03:00  INFO 27325 --- [           main] d.f.i.InterfaceProcessorApplication      : Starting InterfaceProcessorApplication using Java 17.0.3 with PID 27325 (/Users/fernando/Downloads/bsh/interfaceprocessor/build/classes/java/main started by fernando in /Users/fernando/Downloads/bsh)
+2024-02-05T21:18:31.304-03:00  INFO 27325 --- [           main] d.f.i.InterfaceProcessorApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-02-05T21:18:31.472-03:00  WARN 27325 --- [           main] o.s.c.a.ConfigurationClassPostProcessor  : Cannot enhance @Configuration bean definition 'resourceProviderBeanDefinitionRegistryPostProcessor' since its singleton instance has been created too early. The typical cause is a non-static @Bean method with a BeanDefinitionRegistryPostProcessor return type: Consider declaring such methods as 'static' and/or marking the containing configuration class as 'proxyBeanMethods=false'.
+2024-02-05T21:18:31.593-03:00  INFO 27325 --- [           main] d.f.i.InterfaceProcessorApplication      : Started InterfaceProcessorApplication in 0.455 seconds (process running for 0.623)
+IMyResourceProvider.getResource -> my-key-1 - redis
+IMyResourceProvider.getOtherResource -> my-other-resource-key - redis
+IMyResource2Provider.getResource -> my-key-2 - environment
+```
+
+ahora el inconveniente es que no podemos agregar otras dependencias ya que en este punto aun no se inicializado los beans de springboot, para eso vamos a crear otras clases:
+
+```java title="InterfaceProxyFactoryBean.java"
+package dev.fneira.interfaceprocessor.resourceprovider;
+
+import dev.fneira.interfaceprocessor.FakeDataProviderStub;
+import java.lang.reflect.Method;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.cglib.proxy.MethodProxy;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+
+@Configuration
+public class ResourceProviderHandler implements MethodInterceptor {
+
+  private final FakeDataProviderStub redisProvider;
+  private final FakeDataProviderStub datagridProvider;
+  private final Environment environment;
+
+  @Autowired
+  public ResourceProviderHandler(
+      FakeDataProviderStub redisProvider,
+      FakeDataProviderStub datagridProvider,
+      Environment environment) {
+    this.redisProvider = redisProvider;
+    this.datagridProvider = datagridProvider;
+    this.environment = environment;
+  }
+
+  @Override
+  public Object intercept(
+      final Object obj, final Method method, final Object[] args, MethodProxy proxy)
+      throws Throwable {
+    final ResourceValue resourceValue = method.getAnnotation(ResourceValue.class);
+
+    System.out.println(
+        obj.getClass().getSimpleName()
+            + "."
+            + method.getName()
+            + " -> "
+            + resourceValue.key()
+            + " - "
+            + resourceValue.source());
+
+    if (resourceValue.source().equals("redis")) {
+      return this.redisProvider.getResource(resourceValue.key());
+    } else if (resourceValue.source().equals("datagrid")) {
+      return this.datagridProvider.getResource(resourceValue.key());
+    } else if (resourceValue.source().equals("environment")) {
+      return this.environment.getProperty(resourceValue.key());
+    } else {
+      throw new IllegalArgumentException("Invalid source: " + resourceValue.source());
+    }
+  }
+}
+```
+
+esta clase es la encargada de interceptar las ejecuciones de nuestro proxy esto lo hace implementando la clase MethodInterceptor y sobreescribiendo el metodo intercept, aqui ya podemos inyectar otras dependencias
+
+
+ahora toca crear `InterfaceProxyFactoryBean.java` que es la encargara de la creación del proxy
+
+```java title="InterfaceProxyFactoryBean.java"
+package dev.fneira.interfaceprocessor.imp;
+
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceProviderHandler;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.cglib.proxy.Enhancer;
+
+public class ResourceHandlerProxyFactoryBean
+    implements FactoryBean<Object>, InitializingBean, BeanFactoryAware {
+  private BeanFactory beanFactory;
+  private Class<?> type;
+
+  @Override
+  public void setBeanFactory(final BeanFactory beanFactory) throws BeansException {
+    this.beanFactory = beanFactory;
+  }
+
+  <T> T createProxy() {
+    return (T) Enhancer.create(type, beanFactory.getBean(ResourceProviderHandler.class));
+  }
+
+  @Override
+  public Object getObject() {
+    return createProxy();
+  }
+
+  @Override
+  public Class<?> getObjectType() {
+    return type;
+  }
+
+  @Override
+  public void afterPropertiesSet() {
+    if (type == null) {
+      throw new IllegalArgumentException("Property 'type' is required");
+    }
+  }
+
+  public void setType(final Class<?> type) {
+    this.type = type;
+  }
+
+}
+```
+
+ahora modificamos la clase que implementa `BeanDefinitionRegistryPostProcessor.java` para indicar cual clase es nuestra factory:
+
+```java title="BeanDefinitionRegistryPostProcessor.java"
+package dev.fneira.interfaceprocessor.imp;
+
+import dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider;
+import java.util.Set;
+
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+
+@Configuration
+public class ResourceProviderBeanDefinitionRegistryPostProcessor
+    implements BeanDefinitionRegistryPostProcessor {
+
+  @Override
+  public void postProcessBeanDefinitionRegistry(final BeanDefinitionRegistry registry) {
+    final String basePackage = "dev.fneira.interfaceprocessor";
+
+    final Set<BeanDefinition> beanDefinitions = getBeanDefinition(basePackage);
+
+    for (final BeanDefinition beanDefinition : beanDefinitions) {
+      String beanClassName = beanDefinition.getBeanClassName();
+      try {
+        Class<?> targetClass = Class.forName(beanClassName);
+        registerBeanForInterface(registry, targetClass);
+      } catch (ClassNotFoundException e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
+  private Set<BeanDefinition> getBeanDefinition(final String basePackage) {
+    final ClassPathScanningCandidateComponentProvider provider =
+        new ClassPathScanningCandidateComponentProvider(false) {
+          @Override
+          protected boolean isCandidateComponent(final AnnotatedBeanDefinition beanDefinition) {
+            return super.isCandidateComponent(beanDefinition)
+                || beanDefinition.getMetadata().isAbstract();
+          }
+        };
+
+    provider.addIncludeFilter(new AnnotationTypeFilter(ResourceProvider.class, true, true));
+
+    return provider.findCandidateComponents(basePackage);
+  }
+
+  private <T> void registerBeanForInterface(
+      final BeanDefinitionRegistry registry, final Class<T> targetClass) {
+    final BeanDefinitionBuilder definition =
+            BeanDefinitionBuilder.genericBeanDefinition(ResourceHandlerProxyFactoryBean.class)
+                    .addPropertyValue("type", targetClass);
+
+    final BeanDefinition beanDefinition = definition.getRawBeanDefinition();
+    beanDefinition.setAttribute(FactoryBean.OBJECT_TYPE_ATTRIBUTE, targetClass);
+    beanDefinition.setPrimary(true);
+
+    final BeanDefinitionHolder beanDefinitionHolder =
+            new BeanDefinitionHolder(beanDefinition, targetClass.getSimpleName());
+
+    BeanDefinitionReaderUtils.registerBeanDefinition(beanDefinitionHolder, registry);
+  }
+}
+```
+
+ahora si ejecutamos nuestro programa:
+
+```sh {"Result":14-20}
+> Task :InterfaceProcessorApplication.main()
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.2)
+
+2024-02-05T21:33:27.933-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : Starting InterfaceProcessorApplication using Java 17.0.3 with PID 28442 (/Users/fernando/Downloads/bsh/interfaceprocessor/build/classes/java/main started by fernando in /Users/fernando/Downloads/bsh)
+2024-02-05T21:33:27.934-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-02-05T21:33:28.210-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : Started InterfaceProcessorApplication in 0.458 seconds (process running for 0.646)
+
+IMyResourceProvider$$EnhancerByCGLIB$$d852720d.getResource -> my-key-1 - redis
+Resource: my-key-1
+IMyResourceProvider$$EnhancerByCGLIB$$d852720d.getOtherResource -> my-other-resource-key - redis
+Resource: my-other-resource-key
+IMyResource2Provider$$EnhancerByCGLIB$$26f2ceaf.getResource -> os.name - environment
+Mac OS X
+```
+
+y listo esta funcionando, ahora solo queda aplicar nuestra shica en `ResourceProviderHandler` para nuestras interfaces.
+
+### Resumen
+
+- Creamos la anotación `@ResourceProvider` para marcar las interfaces que queremos que se cree un proxy y se inyecte el bean al contexto de spring, de manera automatica, 
+- Creamos la anotación `@ResourceValue` para proveer de valores a los metodos dentro de la interfaz de manera de crear una implementaciones dinamicas.
+- Creamos una clase de tipo `BeanFactory` que es la fabrica de nuestras interfaces y la encargada de crear el proxy
+
+Si quieres hacer esto mas dinamico aún, como crear mas de una anotación y distintos handlers para cada una, puedes ver un ejemplo en mi Github: [fneiraj/JavaSpringExamples](https://github.com/fneiraj/JavaSpringExamples/tree/main/interfaceprocessor)
+
+
+
+```sh {"Result":14-20}
+> Task :InterfaceProcessorApplication.main()
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.2)
+
+2024-02-05T21:33:27.933-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : Starting InterfaceProcessorApplication using Java 17.0.3 with PID 28442 (/Users/fernando/Downloads/bsh/interfaceprocessor/build/classes/java/main started by fernando in /Users/fernando/Downloads/bsh)
+2024-02-05T21:33:27.934-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-02-05T21:33:28.210-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : Started InterfaceProcessorApplication in 0.458 seconds (process running for 0.646)
+
+IMyResourceProvider$$EnhancerByCGLIB$$d852720d.getResource -> my-key-1 - redis
+Resource: my-key-1
+IMyResourceProvider$$EnhancerByCGLIB$$d852720d.getOtherResource -> my-other-resource-key - redis
+Resource: my-other-resource-key
+IMyResource2Provider$$EnhancerByCGLIB$$26f2ceaf.getResource -> os.name - environment
+Mac OS X
+```

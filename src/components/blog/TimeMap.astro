@@ -6,7 +6,10 @@ import { getPostsTimeMap } from '@utils/getPostTimeMap'
 
 const { posts } = Astro.props
 
-const timeMap: Map<string, Map<string, Array<CollectionEntry<'blog'>>>> = getPostsTimeMap(posts)
+const { currentLocale } = Astro;
+const locale = currentLocale === 'es' ? 'es-CL' : 'en-US';
+
+const timeMap: Map<string, Map<string, Array<CollectionEntry<'blog'>>>> = getPostsTimeMap(posts, locale)
 ---
 
 {
@@ -44,7 +47,7 @@ const timeMap: Map<string, Map<string, Array<CollectionEntry<'blog'>>>> = getPos
 										const year = postDate.getFullYear()
 										const month = String(postDate.getMonth() + 1).padStart(2, '0')
 										const day = String(postDate.getDate()).padStart(2, '0')
-										const formattedDate = `${day}-${month}-${year}`
+										const formattedDate = locale === 'es-CL' ? `${day}-${month}-${year}` : `${month}-${day}-${year}`
 										return (
 											<div class='text-lg font-bold'>
 												<span class={'mr-3 text-gray-300 dark:text-opacity-50'}>

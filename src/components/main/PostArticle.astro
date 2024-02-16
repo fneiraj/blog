@@ -7,7 +7,10 @@ export interface Props {
 	post: CollectionEntry<'blog'>
 }
 
-function formatDate(date: Date, locale: string) {
+const { currentLocale } = Astro;
+const locale = currentLocale === 'es' ? 'es-CL' : 'en-US';
+
+function formatDate(date: Date) {
 	return new Date(date)
 		.toLocaleDateString(locale, {
 			year: 'numeric',
@@ -39,7 +42,7 @@ const {
 					transition:name={slugifyStr(title + '-date')}
 					class='text-sm font-normal leading-6 text-gray-500 dark:text-gray-400'
 				>
-					<time datetime={date.toString()}>📆 {formatDate(date, 'es-CL')}</time>
+					<time datetime={date.toString()}>📆 {formatDate(date)}</time>
 					{' • '}
 					🕒
 					{minutesRead.replace('min', 'mins').replace('read', '')}

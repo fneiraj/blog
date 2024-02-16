@@ -49,5 +49,9 @@ export default defineConfig({
       exclude: ["@resvg/resvg-js"]
     },
   },
-  scopedStyleStrategy: "where"
+  scopedStyleStrategy: "where",
+  i18n: {
+    defaultLocale: "es",
+    locales: ["en", "es"],
+  }
 });

@@ -1,14 +1,14 @@
 import type { CollectionEntry } from "astro:content";
 import { postFilter } from "./contentFilter";
 
-export const getPostsTimeMap = (posts: CollectionEntry<"blog">[]) => {
+export const getPostsTimeMap = (posts: CollectionEntry<"blog">[], locale: string) => {
   const timeMap: Map<string, Map<string, Array<CollectionEntry<'blog'>>>> = new Map()
 
   for (const post of posts) {
     if (post.date !== null) {
       const year: string = new Date(post.data.pubDatetime).getFullYear().toString()
       const monthStr = new Date(post.data.pubDatetime)
-        .toLocaleDateString('es-CL', {
+        .toLocaleDateString(locale, {
           month: 'long'
         })
         .split(' ')[0]

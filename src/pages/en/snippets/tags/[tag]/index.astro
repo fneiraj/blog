@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content'
+import getUniqueTags from '@utils/getUniqueSnippetTags'
+import SnippetsLayout from '@layouts/pages/SnippetsLayout.astro'
+
+export async function getStaticPaths() {
+	const snippets = await getCollection('snippet')
+
+	const tags = getUniqueTags(snippets)
+
+	return tags.map(({ tag }) => {
+		return {
+			params: { tag },
+			props: { tag }
+		}
+	})
+}
+
+export interface Props {
+	tag: string
+}
+
+const { tag } = Astro.props
+---
+
+<SnippetsLayout {tag} />

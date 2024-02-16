@@ -16,17 +16,17 @@ export const LOCALE = {
 } as const;
 
 export const HEADER_NAV_LINKS = [
-  { href: '/', title: 'Inicio' },
-  { href: '/blog', title: 'Blog' },
-  { href: '/snippets', title: 'Snippets' },
-  { href: '/projects', title: 'Proyectos' },
+  { href: '/', title: 'NAV_HOME_TITLE' },
+  { href: '/blog', title: 'NAV_BLOG_TITLE' },
+  { href: '/snippets', title: 'NAV_SNIPPETS_TITLE' },
+  { href: '/projects', title: 'NAV_PROJECTS_TITLE' },
   //{ href: '/about-me', title: 'Sobre mi' },
 ]
 
 export const FOOTER_LINKS = [
-  { iconName: 'email', href: 'mailto:hi@fneira.dev' },
-  { iconName: 'github', href: 'https://github.com/fneiraj' },
-  { iconName: 'linkedin', href: 'https://www.linkedin.com/in/fneiraj' },
+  { iconName: 'email', title: 'SEND_ME_A_EMAIL', href: 'mailto:hi@fneira.dev' },
+  { iconName: 'github', title: 'SEE_MY_GITHUB', href: 'https://github.com/fneiraj' },
+  { iconName: 'linkedin', title: 'CONTACT_ME_ON_LINKEDIN', href: 'https://www.linkedin.com/in/fneiraj' },
 
 ]
 

@@ -3,6 +3,9 @@ import { Icon } from 'astro-icon/components'
 import { HEADER_NAV_LINKS, SITE } from '@config'
 import ThemeSwitch from './ThemeSwitch.astro'
 import MobileNav from './MobileNav.astro'
+import SearchButton from './SearchButton.astro'
+import LangSelector from './LangSelector.astro'
+import { getI18n, useTranslatedPath } from 'i18n'
 
 export interface Props {
 	activeNav?: 'posts' | 'tags' | 'about' | 'search'
@@ -10,6 +13,11 @@ export interface Props {
 }
 
 const { activeNav, title } = Astro.props
+
+const { currentLocale } = Astro;
+const i18n = getI18n({ currentLocale });
+const translatedPath = useTranslatedPath(currentLocale);
+
 const ellipsisText = (text: string, length: number) => {
 	if (text.length > length) {
 		return text.substring(0, length) + '...'
@@ -44,7 +52,7 @@ const pathName = ellipsisText(getTitle(), 30)
 <header class='sticky top-0 z-10 bg-slate-200/90 py-4 dark:bg-gray-900/90'>
 	<div class='mx-auto flex max-w-3xl items-center justify-between px-4 sm:px-6 xl:max-w-7xl'>
 		<div>
-			<a href='/' aria-label={SITE.title} title='Ir al inicio'>
+			<a href={translatedPath('/')} aria-label={SITE.title} title={i18n.GO_HOME}>
 				<div
 					class='text-primary-color dark:text-primary-color-dark flex items-center justify-between truncate text-xl font-semibold hover:text-primary-500'
 				>
@@ -57,68 +65,22 @@ const pathName = ellipsisText(getTitle(), 30)
 			{
 				HEADER_NAV_LINKS.filter((link) => link.href !== '/').map((link) => (
 					<a
-						href={link.href}
+						href={translatedPath(link.href)}
 						class={
 							(activeNav === title ? 'active ' : '') +
 							'hidden rounded-xl font-medium text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-opacity-10 sm:block sm:p-4'
 						}
 					>
-						{link.title}
+						{i18n[link.title]}
 					</a>
 				))
 			}
 
-			<button
-				id='search-btn'
-				aria-label='Search'
-				class='hidden rounded-xl hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-opacity-10 sm:block sm:p-4'
-			>
-				<Icon name='search' class='h-6 w-6 text-gray-900 dark:text-gray-100' />
-			</button>
-
+			<SearchButton />
+			<LangSelector />
 			<ThemeSwitch />
 			<MobileNav />
 		</div>
 	</div>
 </header>
 
-<div id='docsearch'></div>
-
-<style>
-	button.DocSearch-Button {
-		display: none;
-	}
-</style>
-
-<script>
-	import docsearch from '@docsearch/js'
-	import '@docsearch/css'
-
-	function initCustomSearchButton() {
-		document.getElementById('search-btn').addEventListener('click', () => {
-			;(document.querySelector('.DocSearch-Button') as HTMLButtonElement).click()
-		})
-
-		document.getElementById('mobile-search-btn')?.addEventListener('click', () => {
-			;(document.querySelector('.DocSearch-Button') as HTMLButtonElement).click()
-		})
-
-		docsearch({
-			container: '#docsearch',
-			appId: 'YOUR_APP_ID',
-			indexName: 'YOUR_INDEX_NAME',
-			apiKey: 'YOUR_SEARCH_API_KEY',
-			placeholder: 'Search...'
-		})
-
-		document.querySelector('.DocSearch-Button').setAttribute('style', 'display: none;')
-	}
-
-	document.addEventListener(
-		'astro:page-load',
-		() => {
-			initCustomSearchButton()
-		},
-		{ once: false }
-	)
-</script>

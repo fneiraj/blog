@@ -1,9 +1,16 @@
+---
+import { getI18n } from "i18n";
+
+const { currentLocale } = Astro;
+const i18n = getI18n({ currentLocale });
+---
+
 <div class='flex justify-end text-base font-medium leading-6'>
 	<a
 		href='/blog'
 		class='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
 		aria-label='All posts'
 	>
-		Ver todos los posts &rarr;
+		{i18n.VIEW_ALL_POSTS} &rarr;
 	</a>
 </div>

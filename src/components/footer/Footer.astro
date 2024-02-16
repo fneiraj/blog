@@ -1,41 +1,46 @@
 ---
-import { Icon } from 'astro-icon/components'
-import { SITE, FOOTER_LINKS } from '@config'
+import { Icon } from "astro-icon/components";
+import { SITE, FOOTER_LINKS } from "@config";
+import { getI18n } from "i18n";
+
+const { currentLocale } = Astro;
+const i18n = getI18n({ currentLocale });
 ---
 
 <footer>
-	<div class='mt-16 flex flex-col items-center'>
-		<div class='mb-3 flex space-x-4'>
+	<div class="mt-16 flex flex-col items-center">
+		<div class="mb-3 flex space-x-4">
 			{
 				FOOTER_LINKS.map((link) => (
 					<a
-						class='text-sm text-gray-500 transition hover:text-gray-600'
-						target='_blank'
-						rel='noopener noreferrer'
+						class="text-sm text-gray-500 transition hover:text-gray-600"
+						target="_blank"
+						rel="noopener noreferrer"
+						title={i18n[link.title]}
 						href={link.href}
 						aria-label={link.iconName}
 					>
 						<Icon
 							name={link.iconName}
 							size={24}
-							class='fill-current text-gray-700 hover:text-primary-500 dark:text-gray-200 dark:hover:text-primary-400 h-8 w-8'
+							class="fill-current text-gray-700 hover:text-primary-500 dark:text-gray-200 dark:hover:text-primary-400 h-8 w-8"
 						/>
 					</a>
 				))
 			}
 		</div>
-		<div class='mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400'>
+		<div class="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
 			<div>{SITE.author}</div>
 			<div>{` • `}</div>
 			<div>{`© ${new Date().getFullYear()}`}</div>
 			<div>{` • `}</div>
-			<a href='/'>{SITE.title}</a>
+			<a href="/">{SITE.title}</a>
 		</div>
 		<div
-			class='mb-2 flex items-center space-x-2 text-sm text-gray-700 hover:text-primary-500 dark:text-gray-200 dark:hover:text-primary-400'
+			class="mb-2 flex items-center space-x-2 text-sm text-gray-700 hover:text-primary-500 dark:text-gray-200 dark:hover:text-primary-400"
 		>
-			<Icon name={'github'} size={14} />
-			<a href={SITE.repo} target='_blank'>Source code</a>
+			<Icon name={"github"} size={14} />
+			<a href={SITE.repo} target="_blank">{i18n.SOURCE_CODE}</a>
 		</div>
 	</div>
 </footer>
