@@ -1,11 +1,13 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content'
 import PostDetails from '@layouts/PostDetails.astro'
+import { getRelatedPosts } from '@utils/getRelatedPosts'
 
 export interface Props {
 	post: CollectionEntry<'blog'>
 	prevPost: CollectionEntry<'blog'>
-	nextPost: CollectionEntry<'blog'>
+	nextPost: CollectionEntry<'blog'>,
+	relatedPosts: CollectionEntry<'blog'>[]
 }
 
 export async function getStaticPaths() {
@@ -18,14 +20,15 @@ export async function getStaticPaths() {
 		props: {
 			post,
 			prevPost: i + 1 === numberOfPosts ? undefined : posts[i + 1],
-			nextPost: i === 0 ? undefined : posts[i - 1]
+			nextPost: i === 0 ? undefined : posts[i - 1],
+			relatedPosts: getRelatedPosts(posts, post),
 		}
 	}))
 
 	return [...postResult]
 }
 
-const { post, prevPost, nextPost } = Astro.props
+const { post, prevPost, nextPost, relatedPosts } = Astro.props
 ---
 
-<PostDetails post={post} prevPost={prevPost} nextPost={nextPost} />
+<PostDetails {post} {prevPost} {nextPost} {relatedPosts} />
