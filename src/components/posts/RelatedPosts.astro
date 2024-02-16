@@ -12,7 +12,7 @@ const { relatedPosts } = Astro.props;
   <h2 class="text-xl">Post relacionados</h2>
   <ul>
     {
-      relatedPosts?.map((post: CollectionEntry<"blog">) => (
+      relatedPosts?.map((post) => (
         <li>
           <a href={post.slug}>{post.data.title}</a>
         </li>
