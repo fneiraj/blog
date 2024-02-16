@@ -1,8 +1,10 @@
 import type { CollectionEntry } from "astro:content";
+import { getSortedPosts } from "./getSortedContent";
 
 export const getRelatedPosts = (
   allPosts: CollectionEntry<"blog">[],
   currentPost: CollectionEntry<"blog">,
+  quantity = 5,
 ): CollectionEntry<"blog">[] => {
   const randomLot = (array, num) => {
     const newArray = [];
@@ -16,12 +18,16 @@ export const getRelatedPosts = (
     return newArray;
   };
 
-  const relatedPosts = allPosts.filter(
+  const relatedPosts = getSortedPosts(allPosts).filter(
     (post) =>
       post.id !== currentPost.id &&
       post.data.tags.some((tag) => currentPost.data.tags.includes(tag)),
   );
 
-  return randomLot(relatedPosts, 5);
+  if (relatedPosts.length === 0) {
+    return undefined;
+  }
+
+  return randomLot(relatedPosts, quantity);
   // return relatedPosts.slice(0, 4)
 };

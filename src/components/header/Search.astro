@@ -1,0 +1,60 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<button
+  id="search-btn"
+  aria-label="Search"
+  class="hidden rounded-xl hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-opacity-10 sm:block sm:p-4"
+>
+  <Icon name="search" class="h-6 w-6 text-gray-900 dark:text-gray-100" />
+</button>
+
+<div id="docsearch" class="hidden"></div>
+
+<style>
+  button.DocSearch-Button {
+    display: none;
+  }
+</style>
+
+<script>
+  import docsearch from "@docsearch/js";
+  import "@docsearch/css";
+
+  function initCustomSearchButton() {
+    document.getElementById("search-btn").addEventListener("click", () => {
+      (
+        document.querySelector(".DocSearch-Button") as HTMLButtonElement
+      ).click();
+    });
+
+    document
+      .getElementById("mobile-search-btn")
+      ?.addEventListener("click", () => {
+        (
+          document.querySelector(".DocSearch-Button") as HTMLButtonElement
+        ).click();
+      });
+
+    docsearch({
+      container: "#docsearch",
+      appId: "YOUR_APP_ID",
+      indexName: "YOUR_INDEX_NAME",
+      apiKey: "YOUR_SEARCH_API_KEY",
+      placeholder: "Search...",
+    });
+
+    document
+      .querySelector(".DocSearch-Button")
+      .setAttribute("style", "display: none;");
+  }
+
+  document.addEventListener(
+    "astro:page-load",
+    () => {
+      initCustomSearchButton();
+    },
+    { once: false },
+  );
+</script>

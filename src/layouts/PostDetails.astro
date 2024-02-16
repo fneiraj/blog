@@ -77,9 +77,9 @@ const date = pubDatetime;
               </div>
             </div>
 
+            {relatedPosts && <RelatedPosts {relatedPosts} />}
             <Giscus />
             <Footer {nextPost} {prevPost} />
-            <RelatedPosts {relatedPosts} />
           </div>
         </div>
       </article>

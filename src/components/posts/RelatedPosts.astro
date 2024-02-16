@@ -1,5 +1,6 @@
 ---
 import { type CollectionEntry } from "astro:content";
+import { slugifyStr } from "@utils/slugify";
 
 export interface Props {
   relatedPosts: CollectionEntry<"blog">[];
@@ -9,14 +10,34 @@ const { relatedPosts } = Astro.props;
 ---
 
 <div class="mt-5">
-  <h2 class="text-xl">Post relacionados</h2>
-  <ul>
+  <h2 class="text-xl">Posts relacionados</h2>
+  <div class="mt-5">
     {
-      relatedPosts?.map((post) => (
-        <li>
-          <a href={post.slug}>{post.data.title}</a>
-        </li>
-      ))
+      relatedPosts.map((post) => {
+        const postDate = new Date(post.data.pubDatetime);
+        const year = postDate.getFullYear();
+        const month = String(postDate.getMonth() + 1).padStart(2, "0");
+        const day = String(postDate.getDate()).padStart(2, "0");
+        const formattedDate = `${day}-${month}-${year}`;
+
+        return (
+          <div class="text-lg font-bold">
+            <span class={"mr-3 text-gray-300 dark:text-opacity-50"}>
+              {formattedDate}
+            </span>
+            <a href={`/posts/${post.slug}`}>
+              <span
+                transition:name={slugifyStr(post.data.title)}
+                class={
+                  "text-hans-100 hover:text-hans-200 hover:text-primary-500 dark:text-opacity-80"
+                }
+              >
+                {post.data.title}
+              </span>
+            </a>
+          </div>
+        );
+      })
     }
-  </ul>
+  </div>
 </div>
