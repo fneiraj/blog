@@ -3,13 +3,14 @@ import { slugifyStr } from "@utils/slugify";
 import Tag from "@components/Tag.astro";
 
 export interface Props {
+  slug: string;
   title: string;
   tags: string[];
   date: Date;
   minutesRead: string;
 }
 
-const { title, tags, date, minutesRead } = Astro.props;
+const { title, tags, date, minutesRead, slug } = Astro.props;
 
 const postDateTemplate: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -22,13 +23,13 @@ const postDateTemplate: Intl.DateTimeFormatOptions = {
   <div class="dark:border-gray space-y-1 border-b border-gray-200 pb-10">
     <div class="space-y-6 text-center">
       <h1
-        transition:name={slugifyStr(title)}
+        transition:name={slugifyStr(slug + "-title")}
         class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14"
       >
         {title}
       </h1>
       <div class="flex flex-wrap">
-        {tags.map((tag) => <Tag text={tag} />)}
+        {tags.map((tag) => <Tag {slug} text={tag} />)}
       </div>
       <dl>
         <div>

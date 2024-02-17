@@ -43,16 +43,18 @@
     });
   };
 
-  addClickEventToBtns();
+  document.addEventListener("astro:page-load", () => addClickEventToBtns(), {
+    once: false,
+  });
 
   const toggleScrollAndComments = (show) => {
     const element = document.getElementById("scroll-top-and-comments");
     if (show) {
-      element.classList.add("md:flex");
-      element.classList.remove("md:hidden");
+      element?.classList.add("md:flex");
+      element?.classList.remove("md:hidden");
     } else {
-      element.classList.add("md:hidden");
-      element.classList.remove("md:flex");
+      element?.classList.add("md:hidden");
+      element?.classList.remove("md:flex");
     }
   };
 

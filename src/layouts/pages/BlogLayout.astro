@@ -37,7 +37,7 @@ const layoutProps = {
       <div class="mt-5 flex flex-wrap gap-4">
         {
           tags.map(({ tagName: t }): any => (
-            <Tag text={t} count={1} isSelected={t === tag} />
+            <Tag slug="blog-page" text={t} count={1} isSelected={t === tag} />
           ))
         }
       </div>
