@@ -1,20 +1,10 @@
+---
+import { GISCUS } from "@config";
+---
+
 <div
   class="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300"
   id="comment"
 >
-  <script
-    src="https://giscus.app/client.js"
-    data-repo="fneiraj/blog"
-    data-repo-id="R_kgDOIVcPIg"
-    data-category="General"
-    data-category-id="DIC_kwDOIVcPIs4Cc8s7"
-    data-mapping={"pathname"}
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="preferred_color_scheme"
-    data-lang="es"
-    crossorigin="anonymous"
-    async></script>
+  <script {...GISCUS} async></script>
 </div>

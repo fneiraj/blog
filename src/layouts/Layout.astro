@@ -49,6 +49,29 @@ const structuredData = {
     },
   ],
 };
+
+const getActiveURL = () => {
+  const currentURL = Astro.url.pathname;
+  if (currentURL === "/") {
+    return "home";
+  }
+
+  if (currentURL.startsWith("/blog") || currentURL.startsWith("/posts")) {
+    return "blog";
+  }
+
+  if (currentURL.startsWith("/snippets")) {
+    return "snippets";
+  }
+
+  if (currentURL.startsWith("/projects")) {
+    return "projects";
+  }
+
+  return undefined;
+};
+
+const activeURL = getActiveURL();
 ---
 
 <!doctype html>
@@ -136,7 +159,7 @@ const structuredData = {
   <body
     class="bg-slate-50 text-black antialiased dark:bg-gray-950 dark:text-white"
   >
-    <Header />
+    <Header activeNav={activeURL} />
     <div
       id="main_content"
       class="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-7xl xl:px-0"
