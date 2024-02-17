@@ -21,7 +21,7 @@ const { prevPost, nextPost } = Astro.props;
             class="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
             aria-label={`Post anterior: ${prevPost.data?.title}`}
           >
-            &larr; {prevPost.data?.title}
+            &larr; {prevPost.data.title}
           </a>
         </div>
       )
@@ -34,7 +34,7 @@ const { prevPost, nextPost } = Astro.props;
             class="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
             aria-label={`Post siguiente: ${nextPost.data?.title}`}
           >
-            {nextPost.data?.title} &rarr;
+            {nextPost.data.title} &rarr;
           </a>
         </div>
       )

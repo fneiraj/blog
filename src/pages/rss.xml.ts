@@ -4,13 +4,12 @@ import { getSortedPosts } from "@utils/getSortedContent";
 import { SITE } from "@config";
 
 export async function GET() {
-  const posts = await getCollection("blog");
-  const sortedPosts = getSortedPosts(posts);
+  const posts = getSortedPosts(await getCollection("blog"));
   return rss({
     title: SITE.title,
     description: SITE.desc,
     site: SITE.website,
-    items: sortedPosts.map(({ data, slug }) => ({
+    items: posts.map(({ data, slug }) => ({
       link: `posts/${slug}/`,
       title: data.title,
       description: data.description,

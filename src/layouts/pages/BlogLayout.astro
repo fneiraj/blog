@@ -5,13 +5,14 @@ import Tag from "@components/Tag.astro";
 import TimeMap from "@components/blog/TimeMap.astro";
 import { getUniqueBlogTags } from "@utils/getUniqueTags";
 import { getPostsByTag } from "@utils/getContentByTag";
+import { getSortedPosts } from "@utils/getSortedContent";
 
 export interface Props {
   tag?: string;
 }
 const { tag } = Astro.props;
 
-const allPosts = await getCollection("blog");
+const allPosts = getSortedPosts(await getCollection("blog"));
 
 const posts = tag ? getPostsByTag(allPosts, tag) : allPosts;
 

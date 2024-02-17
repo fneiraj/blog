@@ -5,9 +5,7 @@ import { getSortedPosts } from "@utils/getSortedContent";
 import LatestPosts from "@components/main/LatestPosts.astro";
 import ViewAllPosts from "@components/main/ViewAllPosts.astro";
 
-const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
+const allPosts = getSortedPosts(await getCollection("blog"));
 
 const MAX_DISPLAY = 3;
 ---
@@ -16,7 +14,7 @@ const MAX_DISPLAY = 3;
   <div class="divide-y divide-gray-200 dark:divide-gray-700">
     {/*<HomeHeader />*/}
     {/*<PopularTags />*/}
-    <LatestPosts posts={posts} maxDisplay={MAX_DISPLAY} />
+    <LatestPosts posts={allPosts} maxDisplay={MAX_DISPLAY} />
   </div>
-  {posts.length > MAX_DISPLAY && <ViewAllPosts />}
+  {allPosts.length > MAX_DISPLAY && <ViewAllPosts />}
 </Layout>

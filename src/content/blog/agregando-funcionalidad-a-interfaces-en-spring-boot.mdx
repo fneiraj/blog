@@ -688,27 +688,4 @@ y listo esta funcionando, ahora solo queda aplicar nuestra shica en `ResourcePro
 - Creamos la anotación `@ResourceValue` para proveer de valores a los metodos dentro de la interfaz de manera de crear una implementaciones dinamicas.
 - Creamos una clase de tipo `BeanFactory` que es la fabrica de nuestras interfaces y la encargada de crear el proxy
 
-Si quieres hacer esto mas dinamico aún, como crear mas de una anotación y distintos handlers para cada una, puedes ver un ejemplo en mi Github: [fneiraj/JavaSpringExamples](https://github.com/fneiraj/JavaSpringExamples/tree/main/interfaceprocessor)
-
-```sh {"Result":14-20}
-> Task :InterfaceProcessorApplication.main()
-
-  .   ____          _            __ _ _
- /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
- \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  '  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::                (v3.2.2)
-
-2024-02-05T21:33:27.933-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : Starting InterfaceProcessorApplication using Java 17.0.3 with PID 28442 (/Users/fernando/Downloads/bsh/interfaceprocessor/build/classes/java/main started by fernando in /Users/fernando/Downloads/bsh)
-2024-02-05T21:33:27.934-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : No active profile set, falling back to 1 default profile: "default"
-2024-02-05T21:33:28.210-03:00  INFO 28442 --- [           main] d.f.i.InterfaceProcessorApplication      : Started InterfaceProcessorApplication in 0.458 seconds (process running for 0.646)
-
-IMyResourceProvider$$EnhancerByCGLIB$$d852720d.getResource -> my-key-1 - redis
-Resource: my-key-1
-IMyResourceProvider$$EnhancerByCGLIB$$d852720d.getOtherResource -> my-other-resource-key - redis
-Resource: my-other-resource-key
-IMyResource2Provider$$EnhancerByCGLIB$$26f2ceaf.getResource -> os.name - environment
-Mac OS X
-```
+Si quieres hacer esto mas dinamico aún, como crear mas de una anotación y distintos handlers para cada una, puedes ver un ejemplo en mi Github: [fneiraj/JavaSpringExamples](https://github.com/fneiraj/JavaSpringExamples/tree/main/spring-interface-processor)

@@ -1,0 +1,248 @@
+---
+pubDatetime: 2024-02-16T00:00:00Z
+title: Creando una anotación custom para validar campos en Spring Boot
+slug: creando-una-anotacion-custom-para-validar-campos-en-spring-boot
+tags:
+  - springboot
+  - java
+description: ""
+---
+
+En este post vamos a ver cómo crear una anotación custom para validar un campo de rut en Spring Boot.
+
+## Creando la anotación
+
+Para crear una anotación custom en Spring Boot, debemos crear una clase que extienda de `ConstraintValidator` y anotarla con `@Constraint`. En este caso, vamos a crear una anotación para validar un campo de rut.
+
+```java title="Rut.java" collapse={1-12} {"Indicamos que es una anotación que se usara en metodos y parametros":13-14} {"Indicamos que es un Constraint y el validador es "RutValidator.java":18-19} {"Mensaje de error cuando no se valide el campo":22-23}
+package dev.fneira.customvalidation.validation;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.PARAMETER;
+
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+
+@Target({FIELD, PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+
+
+@Constraint(validatedBy = RutValidator.class)
+public @interface Rut {
+
+
+  public String message() default "must be a well-formed RUT (e.g. 12345678-9)";
+
+  public Class<?>[] groups() default {};
+
+  public Class<? extends Payload>[] payload() default {};
+}
+
+```
+
+En este caso, la anotación `@Rut` tiene un atributo `message` que es el mensaje que se mostrará si la validación falla. También tiene los atributos `groups` y `payload` que son necesarios para que la anotación funcione correctamente.
+
+## Creando el validador
+
+Ahora vamos a crear la clase `RutValidator` que extiende de `ConstraintValidator` y que se encargará de validar el campo de rut.
+
+```java title="RutValidator.java" {"Implementamos la interfaz ConstraintValidator<(AnotacionCustom), (Tipo de valor)>":6-7} {"Sobreescribimos método 'isValid'":9-11} {"Mediante RegEx validamos que el rut tenga el formato (12345678-9)":13-15} collapse={1-5}
+package dev.fneira.customvalidation.validation;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
+
+public class RutValidator implements ConstraintValidator<Rut, String> {
+
+  @Override
+  public boolean isValid(final String rutValue, final ConstraintValidatorContext context) {
+    return isValidFormat(rutValue);
+  }
+
+  private boolean isValidFormat(final String rut) {
+    return rut.matches("^[0-9]+-[0-9kK]$");
+  }
+}
+```
+
+En este caso, el método `isValid` es el que se encarga de validar el campo de rut. Si el campo es válido, el método debe retornar `true`, en caso contrario, debe retornar `false`.
+
+## Usando la anotación
+
+Ahora que ya tenemos la anotación y el validador, podemos usarla en una clase de dominio de la siguiente manera:
+
+```java title="ClientDTO.java" collapse={1-7, 17-69} {"Agregamos nuestra anotación al campo rut":13-14}
+package dev.fneira.customvalidation.dto;
+
+import dev.fneira.customvalidation.validation.Rut;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDate;
+
+public class ClientDTO {
+
+  @NotBlank private String name;
+  @NotBlank private String lastName;
+  @NotBlank @Email private String email;
+
+  @Rut private String rut;
+  private LocalDate birthDate;
+
+  // Constructors, getters and setters
+  public ClientDTO() {}
+
+  public ClientDTO(
+      final String name,
+      final String lastName,
+      final String email,
+      final String rut,
+      final LocalDate birthDate) {
+    this.name = name;
+    this.lastName = lastName;
+    this.email = email;
+    this.rut = rut;
+    this.birthDate = birthDate;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(final String name) {
+    this.name = name;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(final String lastName) {
+    this.lastName = lastName;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(final String email) {
+    this.email = email;
+  }
+
+  public String getRut() {
+    return rut;
+  }
+
+  public void setRut(final String rut) {
+    this.rut = rut;
+  }
+
+  public LocalDate getBirthDate() {
+    return birthDate;
+  }
+
+  public void setBirthDate(final LocalDate birthDate) {
+    this.birthDate = birthDate;
+  }
+}
+
+```
+
+En nuestro controlador, podemos usar la anotación `@Valid` para que Spring Boot valide automáticamente los campos de la clase `ClientDTO`:
+
+```java title="ClientController.java" collapse={1-11} {"Agregamos la anotación @Valid para que Spring Boot valide los campos de ClientDTO":19-20}
+package dev.fneira.customvalidation.controller;
+
+import dev.fneira.customvalidation.dto.ClientDTO;
+import dev.fneira.customvalidation.service.ClientService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/client")
+public class ClientController {
+
+  @Autowired private ClientService clientService;
+
+  @PostMapping
+
+  public ClientDTO createClient(final @Valid @RequestBody ClientDTO clientDTO) {
+    return clientService.createClient(clientDTO);
+  }
+}
+```
+
+De esta manera, cuando se intente guardar una instancia de `Persona` con un rut inválido, se lanzará una excepción de tipo `ConstraintViolationException`.
+
+```json
+{
+  "timestamp": "2024-02-17T01:31:40.181+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/client"
+}
+```
+
+El error no nos dice mucho, por lo que si queremos mostrar un mensaje más amigable, podemos capturar la excepción y mostrar el mensaje de error con un ControllerAdvice:
+
+```java title="GlobalExceptionHandler.java" collapse={1-11} {"Marcamos el metodo con @ExceptionHandler(MethodArgumentNotValidException.class)":15-16} {"Devolvemos un ErrorDto con el mensaje del error":19-23} {"Objeto ErrorDto":26-31}
+package dev.fneira.customvalidation.controller;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ErrorDto handleMethodArgumentNotValidException(final MethodArgumentNotValidException ex) {
+
+    return new ErrorDto(
+        "Validation error",
+        ex.getBindingResult().getFieldErrors().stream()
+            .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)));
+  }
+
+
+  public record ErrorDto(String error, Object details) {
+    public ErrorDto(final String error, final String detail) {
+      this(error, List.of(detail));
+    }
+  }
+}
+```
+
+Ahora si intentamos guardar una instancia de `ClientDTO` con un rut inválido, obtendremos un mensaje de error más amigable:
+
+```json
+{
+  "error": "Validation error",
+  "details": {
+    "rut": "must be a well-formed RUT (e.g. 12345678-9)"
+  }
+}
+```
+
+## Conclusión
+
+En este post vimos cómo crear una anotación custom para validar un campo de rut en Spring Boot. Esto nos permite tener un código más limpio y fácil de mantener, ya que la lógica de validación está encapsulada en una anotación y un validador.
+
+El código fuente de este post está disponible en [fneiraj/JavaSpringExamples](https://github.com/fneiraj/JavaSpringExamples/tree/main/spring-custom-validation)
