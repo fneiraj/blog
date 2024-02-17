@@ -116,7 +116,7 @@ const date = pubDatetime;
     document.addEventListener("scroll", updateScrollProgress);
   };
   document.addEventListener(
-    "astro:page-load",
+    "astro:after-swap",
     () => {
       initPostDetails();
     },
