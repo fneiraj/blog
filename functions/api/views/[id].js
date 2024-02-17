@@ -5,7 +5,7 @@ export async function onRequestGet(context) {
     return new Response("Not found", { status: 404 });
   }
 
-  const post = JSON.parse(await context.env.PAGE_VIEW_RECORDS.get("post:" + id));
+  const post = JSON.parse(await context.env.PAGE_VIEW_RECORDS?.get("post:" + id));
 
   if (!post) {
     const post = await context.env.PAGE_VIEW_RECORDS.put("post:" + id, { views: 1 });
