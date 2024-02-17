@@ -9,12 +9,16 @@ export async function onRequestGet(context) {
   console.log('------')
   console.log(context.env)
 
-  const post = await context.env.PAGE_VIEW_RECORDS?.get("post:" + id);
+  const rawPost = await context.env.PAGE_VIEW_RECORDS?.get("post:" + id);
 
-  if (!post) {
+  if (!rawPost) {
     await context.env.PAGE_VIEW_RECORDS.put("post:" + id, JSON.stringify({ views: 1 }));
     return Response.json({ id, view: 1 });
   }
 
-  return Response.json({ id, view: post.views });
+  const { views: currentViews } = JSON.parse(rawPost);
+
+  await context.env.PAGE_VIEW_RECORDS.put("post:" + id, JSON.stringify({ views: currentViews + 1 }));
+
+  return Response.json({ id, view: currentViews + 1 });
 }
