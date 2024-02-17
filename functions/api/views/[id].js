@@ -5,6 +5,10 @@ export async function onRequestGet(context) {
     return new Response("Not found", { status: 404 });
   }
 
+  console.log(context)
+  console.log('------')
+  console.log(context.env)
+
   const post = await context.env.PAGE_VIEW_RECORDS?.get("post:" + id);
 
   if (!post) {
