@@ -82,6 +82,17 @@ const activeURL = getActiveURL();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <script is:inline src="/toggle-theme.js"></script>
+
+    <link
+      rel="preload"
+      href="/fonts/Space_Grotesk.woff2"
+      as="font"
+      crossorigin
+      type="font/woff2"
+    />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
@@ -90,7 +101,6 @@ const activeURL = getActiveURL();
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- General Meta Tags -->
-    <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
@@ -147,17 +157,8 @@ const activeURL = getActiveURL();
       set:html={JSON.stringify(structuredData)}
     />
 
-    <link
-      rel="preload"
-      href="/fonts/Space_Grotesk.woff2"
-      as="font"
-      crossorigin
-      type="font/woff2"
-    />
-
     <ViewTransitions />
     <!--<script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js"></script>-->
-    <script is:inline src="/toggle-theme.js"></script>
   </head>
   <body
     class="bg-slate-50 text-black antialiased dark:bg-gray-950 dark:text-white"
