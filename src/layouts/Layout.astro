@@ -176,13 +176,20 @@ const activeURL = getActiveURL();
       </div>
       <Footer />
     </div>
-  </body><script is:inline>
-    window.onload = () => {
-      function showMain() {
-        document.body.classList.remove("hidden");
-      }
+    <script is:inline>
+      document.addEventListener(
+        "astro:page-load",
+        () => {
+          window.onload = () => {
+            function showMain() {
+              document.body.classList.remove("hidden");
+            }
 
-      showMain();
-    };
-  </script>
+            showMain();
+          };
+        },
+        { once: false },
+      );
+    </script>
+  </body>
 </html>
