@@ -75,11 +75,11 @@ const activeURL = getActiveURL();
 ---
 
 <!doctype html>
-<html lang=`${LOCALE.lang ?? "en"}` class="scroll-smooth">
+<html lang=`${LOCALE.lang ?? "en"}` class="scroll-smooth" data-theme="dark">
   <head>
-    <script is:inline defer>
-      const theme = localStorage.getItem("theme") || "dark";
-      document.documentElement.dataset.theme = theme;
+    <script is:inline>
+      document.documentElement.dataset.theme =
+        localStorage.getItem("theme") || "dark";
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
