@@ -79,7 +79,7 @@ const activeURL = getActiveURL();
   <head>
     <script is:inline defer>
       const theme = localStorage.getItem("theme") || "dark";
-      document.querySelector("html").className = theme;
+      document.documentElement.dataset.theme = theme;
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
