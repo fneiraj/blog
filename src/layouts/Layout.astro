@@ -180,13 +180,11 @@ const activeURL = getActiveURL();
       document.addEventListener(
         "astro:page-load",
         () => {
-          window.onload = () => {
-            function showMain() {
-              document.body.classList.remove("hidden");
-            }
+          function showMain() {
+            document.body.classList.remove("hidden");
+          }
 
-            showMain();
-          };
+          showMain();
         },
         { once: false },
       );
