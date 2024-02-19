@@ -77,7 +77,7 @@ const activeURL = getActiveURL();
 <!doctype html>
 <html lang=`${LOCALE.lang ?? "en"}` class="scroll-smooth" data-theme="dark">
   <head>
-    <script is:inline defer>
+    <script is:inline>
       document.documentElement.dataset.theme =
         localStorage.getItem("theme") || "dark";
     </script>
