@@ -12,91 +12,12 @@ html[data-theme="dark"] #light-icon {
   display: block;
 }
 
-.task-list-item::before {
-  @apply hidden;
-}
-
-.task-list-item {
-  @apply list-none;
-}
-
-.footnotes {
-  @apply mt-12 border-t border-gray-200 pt-8 dark:border-gray-700;
-}
-
-.data-footnote-backref {
-  @apply no-underline;
-}
-
-.csl-entry {
-  @apply my-5;
-}
-
 /* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition:
     background-color 600000s 0s,
     color 600000s 0s;
-}
-
-.katex-display {
-  overflow: auto hidden;
-}
-
-/* START: CSS Github discussion */
-#comments-container .giscus-frame {
-  @apply w-full;
-}
-
-/* END: CSS Github discussion */
-
-/* START: CSS popular tags */
-.popular-tags .java {
-  @apply bg-teal-50;
-  @apply text-black;
-}
-
-.popular-tags .javascript {
-  @apply bg-amber-400;
-}
-
-.popular-tags .typescript {
-  @apply bg-blue-500;
-}
-
-.popular-tags .nestjs {
-  @apply bg-rose-500;
-}
-
-.popular-tags .react {
-  @apply bg-sky-500;
-}
-
-.popular-tags .devops {
-  @apply bg-sky-600;
-}
-
-.popular-tags .database {
-  @apply bg-green-900;
-}
-
-/* END: CSS popular tags */
-
-/* START: ViewTransition */
-::view-transition-old,
-::view-transition-new {
-  animation-duration: 5s;
-}
-
-#sun-svg,
-html[class="dark"] #dark-icon {
-  display: none;
-}
-
-#moon-svg,
-html[class="dark"] #light-icon {
-  display: block;
 }
 
 @font-face {

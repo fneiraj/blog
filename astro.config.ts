@@ -1,16 +1,16 @@
 import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
 import tailwind from "@astrojs/tailwind";
+import sitemap from "@astrojs/sitemap";
+import preact from "@astrojs/preact";
+import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
+import icon from "astro-icon";
+import expressiveCode from "astro-expressive-code";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
-import sitemap from "@astrojs/sitemap";
-import { SITE } from "./src/config";
 import rehypeExternalLinks from "rehype-external-links";
 import { remarkReadingTime } from "./scripts/remark-reading-time.mjs";
-import expressiveCode from "astro-expressive-code";
-import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
-import mdx from "@astrojs/mdx";
-import icon from "astro-icon";
-import preact from "@astrojs/preact";
+import { SITE } from "./src/config";
 
 // https://astro.build/config
 export default defineConfig({

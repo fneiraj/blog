@@ -2,7 +2,7 @@
 import { HEADER_NAV_LINKS, SITE } from "@config";
 import ThemeSwitch from "./ThemeSwitch.astro";
 import MobileNav from "./MobileNav.astro";
-import Search from "./Search.astro";
+//import Search from "./Search.astro";
 
 export interface Props {
   activeNav?: "home" | "posts" | "blog" | "snippets" | "projects" | undefined;
@@ -72,7 +72,7 @@ const pathName = ellipsisText(getTitle(), 30);
         ))
       }
 
-      <Search />
+      <!--Search /> -->
 
       <ThemeSwitch />
       <MobileNav />
