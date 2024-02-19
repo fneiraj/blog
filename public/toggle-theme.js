@@ -38,7 +38,7 @@ function changeGiscusTheme() {
 }
 
 function reflectPreference() {
-  document.firstElementChild.setAttribute(themeValue);
+  document.firstElementChild.setAttribute("data-theme", themeValue);
 
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 
