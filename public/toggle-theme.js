@@ -64,6 +64,7 @@ function reflectPreference() {
 
 // set early so no page flashes / CSS is made aware
 reflectPreference();
+changeGiscusTheme();
 
 window.onload = () => {
   function setThemeFeature() {
