@@ -38,12 +38,7 @@ function changeGiscusTheme() {
 }
 
 function reflectPreference() {
-  document.firstElementChild.classList.add(themeValue);
-  document.firstElementChild.setAttribute("data-theme", themeValue);
-  document.firstElementChild.setAttribute(
-    "style",
-    "color-scheme: " + themeValue,
-  );
+  document.firstElementChild.setAttribute(themeValue);
 
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 
