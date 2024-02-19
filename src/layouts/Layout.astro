@@ -77,10 +77,6 @@ const activeURL = getActiveURL();
 <!doctype html>
 <html lang=`${LOCALE.lang ?? "en"}` class="scroll-smooth" data-theme="dark">
   <head>
-    <script is:inline defer>
-      const theme = localStorage.getItem("theme") || "dark";
-      document.documentElement.dataset.theme = theme;
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
@@ -165,6 +161,10 @@ const activeURL = getActiveURL();
     class="bg-slate-50 text-black antialiased dark:bg-gray-950 dark:text-white"
   >
     <Header activeNav={activeURL} />
+    <script is:inline>
+      const theme = localStorage.getItem("theme") || "dark";
+      document.documentElement.dataset.theme = theme;
+    </script>
     <div
       id="main_content"
       class="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-7xl xl:px-0"
