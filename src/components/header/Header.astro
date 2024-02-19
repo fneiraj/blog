@@ -5,7 +5,7 @@ import MobileNav from "./MobileNav.astro";
 import Search from "./Search.astro";
 
 export interface Props {
-  activeNav?: "posts" | "blog" | "snippets" | "projects" | undefined;
+  activeNav?: "home" | "posts" | "blog" | "snippets" | "projects" | undefined;
 }
 
 const { activeNav } = Astro.props;
@@ -52,7 +52,7 @@ const pathName = ellipsisText(getTitle(), 30);
         <div
           class="text-primary-color dark:text-primary-color-dark flex items-center justify-between truncate text-xl font-semibold hover:text-primary-500"
         >
-          <span class="mr-1">~$ </span>
+          <span class="mr-1">~$</span>
           <span>fneira.dev</span>
         </div>
       </a>
