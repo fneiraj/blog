@@ -38,7 +38,7 @@ function changeGiscusTheme() {
 }
 
 function reflectPreference() {
-  document.firstElementChild.setAttribute("class", themeValue);
+  document.firstElementChild.classList.add(themeValue);
   document.firstElementChild.setAttribute("data-theme", themeValue);
   document.firstElementChild.setAttribute(
     "style",
