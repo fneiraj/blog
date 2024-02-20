@@ -80,10 +80,6 @@ const activeURL = getActiveURL();
   class={`${scrollSmooth && "scroll-smooth"}`}
 >
   <head>
-    <script is:inline>
-      document.documentElement.dataset.theme =
-        localStorage.getItem("theme") || "dark";
-    </script>
     <script is:inline src="/toggle-theme.js" async></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
