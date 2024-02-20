@@ -13,28 +13,31 @@ import { GISCUS } from "@config";
   document.addEventListener(
     "astro:page-load",
     () => {
-      const giscusIframe = document.querySelector("iframe.giscus-frame");
-      giscusIframe.addEventListener("load", function () {
-        function changeGiscusTheme() {
-          function sendMessage(message) {
-            const iframe = document.querySelector("iframe.giscus-frame");
-            if (!!iframe) {
-              iframe.contentWindow.postMessage(
-                { giscus: message },
-                "https://giscus.app",
-              );
+      let giscusIframe = document.querySelector("iframe.giscus-frame");
+      while (!giscusIframe) {
+        giscusIframe = document.querySelector("iframe.giscus-frame");
+        giscusIframe?.addEventListener("load", function () {
+          function changeGiscusTheme() {
+            function sendMessage(message) {
+              const iframe = document.querySelector("iframe.giscus-frame");
+              if (!!iframe) {
+                iframe.contentWindow.postMessage(
+                  { giscus: message },
+                  "https://giscus.app",
+                );
+              }
             }
+
+            sendMessage({
+              setConfig: {
+                theme: localStorage.getItem("theme") || "dark",
+              },
+            });
           }
 
-          sendMessage({
-            setConfig: {
-              theme: localStorage.getItem("theme") || "dark",
-            },
-          });
-        }
-
-        changeGiscusTheme();
-      });
+          changeGiscusTheme();
+        });
+      }
     },
     {
       once: false,
