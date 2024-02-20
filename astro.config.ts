@@ -23,6 +23,7 @@ export default defineConfig({
     sitemap(),
     expressiveCode({
       plugins: [pluginCollapsibleSections()],
+      themeCssSelector: (theme) => `[code-data-theme='${theme.name}']`,
     }),
     mdx(),
     icon(),

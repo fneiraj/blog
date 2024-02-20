@@ -43,6 +43,11 @@ function changeGiscusTheme() {
 
 function reflectPreference() {
   document.firstElementChild.setAttribute("data-theme", themeValue);
+  document.firstElementChild.setAttribute(
+    "code-data-theme",
+    themeValue === "dark" ? "dark" : "github-light",
+  );
+  changeGiscusTheme();
 
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 
@@ -62,8 +67,6 @@ function reflectPreference() {
       .querySelector("meta[name='theme-color']")
       ?.setAttribute("content", bgColor);
   }
-
-  changeGiscusTheme();
 }
 
 // set early so no page flashes / CSS is made aware
