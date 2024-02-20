@@ -51,4 +51,5 @@ export const GISCUS = {
   "data-input-position": "bottom",
   "data-theme": "preferred_color_scheme",
   "data-lang": "es",
+  loading: "lazy",
 };
