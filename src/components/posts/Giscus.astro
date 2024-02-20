@@ -10,23 +10,31 @@ import { GISCUS } from "@config";
 </div>
 
 <script is:inline>
-  function changeGiscusTheme() {
-    function sendMessage(message) {
-      const iframe = document.querySelector("iframe.giscus-frame");
-      if (!!iframe) {
-        iframe.contentWindow.postMessage(
-          { giscus: message },
-          "https://giscus.app",
-        );
+  document.addEventListener(
+    "astro:page-load",
+    () => {
+      function changeGiscusTheme() {
+        function sendMessage(message) {
+          const iframe = document.querySelector("iframe.giscus-frame");
+          if (!!iframe) {
+            iframe.contentWindow.postMessage(
+              { giscus: message },
+              "https://giscus.app",
+            );
+          }
+        }
+
+        sendMessage({
+          setConfig: {
+            theme: themeValue,
+          },
+        });
       }
-    }
 
-    sendMessage({
-      setConfig: {
-        theme: themeValue,
-      },
-    });
-  }
-
-  changeGiscusTheme();
+      changeGiscusTheme();
+    },
+    {
+      once: false,
+    },
+  );
 </script>
