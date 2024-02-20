@@ -162,7 +162,7 @@ const activeURL = getActiveURL();
     <!--<script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js"></script>-->
   </head>
   <body
-    class="hidden bg-slate-50 text-black antialiased dark:bg-gray-950 dark:text-white"
+    class="bg-slate-50 text-black antialiased dark:bg-gray-950 dark:text-white"
   >
     <Header activeNav={activeURL} />
     <div
@@ -176,18 +176,5 @@ const activeURL = getActiveURL();
       </div>
       <Footer />
     </div>
-    <script is:inline>
-      document.addEventListener(
-        "astro:page-load",
-        () => {
-          function showMain() {
-            document.body.classList.remove("hidden");
-          }
-
-          showMain();
-        },
-        { once: false },
-      );
-    </script>
   </body>
 </html>
