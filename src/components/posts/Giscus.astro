@@ -11,7 +11,7 @@ import { GISCUS } from "@config";
 
 <script is:inline>
   document.addEventListener(
-    "DOMContentLoaded",
+    "astro:page-load",
     () => {
       const giscusIframe = document.querySelector("iframe.giscus-frame");
       giscusIframe.addEventListener("load", function () {
