@@ -6,5 +6,26 @@ import { GISCUS } from "@config";
   class="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300"
   id="comment"
 >
-  <script {...GISCUS} is:inline async></script>
+  <script {...GISCUS} async></script>
 </div>
+
+<script is:inline>
+  function changeGiscusTheme() {
+    function sendMessage(message) {
+      const iframe = document.querySelector("iframe.giscus-frame");
+      if (!iframe) return;
+      iframe.contentWindow.postMessage(
+        { giscus: message },
+        "https://giscus.app",
+      );
+    }
+
+    sendMessage({
+      setConfig: {
+        theme: themeValue,
+      },
+    });
+
+    changeGiscusTheme();
+  }
+</script>
