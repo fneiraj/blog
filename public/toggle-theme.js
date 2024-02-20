@@ -58,8 +58,6 @@ function reflectPreference() {
       .querySelector("meta[name='theme-color']")
       ?.setAttribute("content", bgColor);
   }
-
-  changeGiscusTheme();
 }
 
 // set early so no page flashes / CSS is made aware
