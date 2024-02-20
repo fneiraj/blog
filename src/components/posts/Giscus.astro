@@ -28,9 +28,11 @@ import { GISCUS } from "@config";
               }
             }
 
+            const theme = localStorage.getItem("theme") || "dark";
+
             sendMessage({
               setConfig: {
-                theme: localStorage.getItem("theme") || "dark",
+                theme: theme,
               },
             });
           }
