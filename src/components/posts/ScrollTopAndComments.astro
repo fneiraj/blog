@@ -29,42 +29,46 @@
 </div>
 
 <script is:inline>
-  const addClickEventToBtns = () => {
-    const scrollToCommentBtn = document.getElementById("scroll-to-comment");
-    const scrollToTopBtn = document.getElementById("scroll-to-top");
+  document.addEventListener(
+    "astro:page-load",
+    () => {
+      const scrollToCommentBtn = document.getElementById("scroll-to-comment");
+      const scrollToTopBtn = document.getElementById("scroll-to-top");
 
-    scrollToCommentBtn.addEventListener("click", () => {
-      const comment = document.getElementById("comment");
-      comment?.scrollIntoView({ behavior: "smooth" });
-    });
+      scrollToCommentBtn?.addEventListener("click", () => {
+        const comment = document.getElementById("comment");
+        comment?.scrollIntoView({ behavior: "smooth" });
+      });
 
-    scrollToTopBtn.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  };
+      scrollToTopBtn?.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    },
+    {
+      once: false,
+    },
+  );
 
-  document.addEventListener("astro:page-load", () => addClickEventToBtns(), {
-    once: false,
+  window.addEventListener("scroll", () => {
+    const toggleScrollAndComments = (show) => {
+      const element = document.getElementById("scroll-top-and-comments");
+      if (show) {
+        element?.classList.add("md:flex");
+        element?.classList.remove("md:hidden");
+      } else {
+        element?.classList.add("md:hidden");
+        element?.classList.remove("md:flex");
+      }
+    };
+
+    const handleWindowScroll = () => {
+      if (window.scrollY > 50) {
+        toggleScrollAndComments(true);
+      } else {
+        toggleScrollAndComments(false);
+      }
+    };
+
+    handleWindowScroll();
   });
-
-  const toggleScrollAndComments = (show) => {
-    const element = document.getElementById("scroll-top-and-comments");
-    if (show) {
-      element?.classList.add("md:flex");
-      element?.classList.remove("md:hidden");
-    } else {
-      element?.classList.add("md:hidden");
-      element?.classList.remove("md:flex");
-    }
-  };
-
-  const handleWindowScroll = () => {
-    if (window.scrollY > 50) {
-      toggleScrollAndComments(true);
-    } else {
-      toggleScrollAndComments(false);
-    }
-  };
-
-  window.addEventListener("scroll", handleWindowScroll);
 </script>
