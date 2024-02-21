@@ -26,7 +26,7 @@ const {
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
   pubDatetime,
   modDatetime,
-  scrollSmooth = false,
+  scrollSmooth = true,
 } = Astro.props;
 
 const socialImageURL = new URL(
@@ -80,8 +80,8 @@ const activeURL = getActiveURL();
   class={`${scrollSmooth && "scroll-smooth"}`}
 >
   <head>
-    <script is:inline src="/toggle-theme.js" async></script>
     <meta charset="UTF-8" />
+    <script is:inline src="/toggle-theme.js" async></script>
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />

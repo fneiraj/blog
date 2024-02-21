@@ -3,9 +3,10 @@ import mdx from "@astrojs/mdx";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
 import preact from "@astrojs/preact";
-import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import icon from "astro-icon";
-import expressiveCode from "astro-expressive-code";
+import astroExpressiveCode from "astro-expressive-code";
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
+import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
 import rehypeExternalLinks from "rehype-external-links";
@@ -16,17 +17,25 @@ import { SITE } from "./src/config";
 export default defineConfig({
   site: SITE.website,
   integrations: [
+    preact(),
+    sitemap(),
+    mdx(),
+    icon(),
     tailwind({
       applyBaseStyles: false,
     }),
-    preact(),
-    sitemap(),
-    expressiveCode({
-      plugins: [pluginCollapsibleSections()],
+    astroExpressiveCode({
+      plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
       themeCssSelector: (theme) => `[code-data-theme='${theme.name}']`,
+      themes: ["github-dark", "github-light"],
+      defaultProps: {
+        overridesByLang: {
+          "json,sh": {
+            showLineNumbers: false,
+          },
+        },
+      },
     }),
-    mdx(),
-    icon(),
   ],
   redirects: {
     "/posts": "/blog",
@@ -58,10 +67,6 @@ export default defineConfig({
         },
       ],
     ],
-    shikiConfig: {
-      theme: "one-dark-pro",
-      wrap: true,
-    },
   },
   vite: {
     optimizeDeps: {
