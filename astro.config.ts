@@ -19,7 +19,6 @@ export default defineConfig({
   integrations: [
     preact(),
     sitemap(),
-    mdx(),
     icon(),
     tailwind({
       applyBaseStyles: false,
@@ -36,6 +35,7 @@ export default defineConfig({
         },
       },
     }),
+    mdx(),
   ],
   redirects: {
     "/posts": "/blog",
