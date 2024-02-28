@@ -5,6 +5,7 @@ import Tags from "@components/snippets/Tags.astro";
 import Snippet from "@components/snippets/Snippet.astro";
 import getUniqueTags from "@utils/getUniqueSnippetTags";
 import { getSnippetsByTag } from "@utils/getContentByTag";
+import { getSortedSnippets } from "@utils/getSortedContent";
 
 export interface Props {
   tag?: string;
@@ -12,7 +13,7 @@ export interface Props {
 
 const { tag } = Astro.props;
 
-const allSnippets = await getCollection("snippet");
+const allSnippets = getSortedSnippets(await getCollection("snippet"));
 
 const tags = getUniqueTags(allSnippets);
 
