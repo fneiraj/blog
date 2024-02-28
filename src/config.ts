@@ -24,7 +24,7 @@ export const HEADER_NAV_LINKS = [
     title: "Blog",
   },
   { href: "/snippets", title: "Snippets" },
-  { href: "/projects", title: "Proyectos" },
+  //  { href: "/projects", title: "Proyectos" },
   //{ href: '/about-me', title: 'Sobre mi' },
 ];
 

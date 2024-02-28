@@ -7,8 +7,10 @@ slug: "crear-usuario-admin-en-pve"
 ---
 
 ```sh
-adduser fneiraj
-pveum useradd fneiraj@pam
-pveum passwd fneiraj@pam
-pveum aclmod / -user fneiraj@pam -role Administrator
+adduser newuser
+pveum useradd newuser@pam
+pveum passwd newuser@pam
+pveum aclmod / -user newuser@pam -role Administrator
 ```
+
+Reemplazar '**_newuser_**' por el nombre de usuario, esto permitira al usuario ingresar al panel de administración web de proxmox.
