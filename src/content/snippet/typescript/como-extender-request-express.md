@@ -7,8 +7,6 @@ slug: "como-extender-request-express"
 ---
 
 ```ts title="src/@types/express/index.d.ts"
-import { Request } from "express";
-
 declare global {
   namespace Express {
     export interface Request {
