@@ -18,7 +18,7 @@ function formatDate(date: Date, locale: string) {
 }
 
 const { post } = Astro.props;
-const { slug, data, id } = post;
+const { slug, data } = post;
 const { pubDatetime: date, title, tags, description: summary } = data;
 
 const {
@@ -42,7 +42,7 @@ const {
           <time datetime={date.toString()}>📆 {formatDate(date, "es-CL")}</time>
           {" • "}
           🕒
-          {minutesRead.replace("min", "mins").replace("read", "")}
+          {minutesRead}
         </dd>
       </dl>
       <div class="space-y-5 xl:col-span-4">
