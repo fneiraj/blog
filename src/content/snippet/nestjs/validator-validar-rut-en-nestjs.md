@@ -6,39 +6,48 @@ tag: nestjs
 ---
 
 ```ts title="rut.validator.ts"
-import { BadRequestException } from "@nestjs/common";
 import {
+  ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
+  registerDecorator,
 } from "class-validator";
 
-@ValidatorConstraint({ name: "IsRutValid", async: true })
-export class isRutValid implements ValidatorConstraintInterface {
-  async validate(value: string) {
-    if (!value) {
-      throw new BadRequestException("RUT is required");
-    }
-
-    if (!value.match(/^[0-9]+[-]{1}[0-9kK]{1}$/)) {
-      throw new BadRequestException(
-        "RUT have invalid format, must be 12345678-9",
-      );
+@ValidatorConstraint({ name: "RutValidator", async: false })
+class RutValidator implements ValidatorConstraintInterface {
+  validate(value: string): boolean {
+    if (!value || !value.match(/^[0-9]+[-]{1}[0-9kK]{1}$/)) {
+      return false;
     }
 
     return true;
   }
+  defaultMessage(): string {
+    return `$property must be a valid RUT (e.g. 12345678-9)`;
+  }
+}
+export function IsRut(validationOptions?: ValidationOptions) {
+  return (object: unknown, propertyName: string) => {
+    registerDecorator({
+      name: "isRut",
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: RutValidator,
+    });
+  };
 }
 ```
 
 Modo de uso:
 
 ```ts title="test.controller.ts"
-import { isRutValid } from "./rut.validator";
+import { IsRut } from "./rut.validator";
 import { Controller, Get, Header, Query } from "@nestjs/common";
 import { Validate } from "class-validator";
 
 export class TestRequestDto {
-  @Validate(isRutValid)
+  @IsRut()
   clientCode: string;
 }
 
@@ -61,7 +70,7 @@ resultado:
 
 ```json
 {
-  "message": "RUT have invalid format, must be 12345678-9",
+  "message": "rut must be a valid RUT (e.g. 12345678-9)",
   "error": "Bad Request",
   "statusCode": 400
 }
