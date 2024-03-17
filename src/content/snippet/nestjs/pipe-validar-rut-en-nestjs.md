@@ -3,7 +3,6 @@ pubDatetime: 2024-03-16T00:00:00Z
 title: Pipe para validar RUT en NestJS
 slug: pipe-para-validar-rut-en-nestjs
 tag: nestjs
-description: Pipe para validar RUT en NestJS
 ---
 
 ```ts title="rut.pipe.ts"
@@ -47,7 +46,7 @@ export class TestController {
 
 resultado:
 
-curl http://localhost:8080/test-rut?rut=invalid_rut
+`curl http://localhost:8080/test-rut?rut=invalid_rut`
 
 ```json
 {

@@ -57,7 +57,7 @@ export class TestController {
 
 resultado:
 
-curl http://localhost:8080/test-rut?rut=invalid_rut
+`curl http://localhost:8080/test-rut?rut=invalid_rut`
 
 ```json
 {
