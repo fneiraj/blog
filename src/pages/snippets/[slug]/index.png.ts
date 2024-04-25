@@ -8,8 +8,6 @@ export async function getStaticPaths() {
     p.filter(({ data }) => !data.draft && !data.ogImage),
   );
 
-  console.log(slugifyStr(posts[0].slug));
-
   return posts.map((post) => ({
     params: { slug: slugifyStr(post.slug) },
     props: post,

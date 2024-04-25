@@ -27,7 +27,6 @@ export function pluginLanguageBadge() {
     `,
     hooks: {
       postprocessRenderedBlock: ({ codeBlock, renderData }) => {
-        console.log(codeBlock.language);
         setProperty(
           renderData.blockAst,
           "data-language",

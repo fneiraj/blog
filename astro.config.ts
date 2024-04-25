@@ -19,7 +19,6 @@ export default defineConfig({
   site: SITE.website,
   integrations: [
     preact(),
-    sitemap(),
     icon(),
     tailwind({
       applyBaseStyles: false,
@@ -41,6 +40,7 @@ export default defineConfig({
       },
     }),
     mdx(),
+    sitemap(),
   ],
   redirects: {
     "/posts": "/blog",
@@ -78,5 +78,6 @@ export default defineConfig({
       exclude: ["@resvg/resvg-js"],
     },
   },
+  trailingSlash: "never",
   scopedStyleStrategy: "where",
 });
