@@ -12,6 +12,7 @@ import remarkCollapse from "remark-collapse";
 import rehypeExternalLinks from "rehype-external-links";
 import { remarkReadingTime } from "./scripts/remark-reading-time.mjs";
 import { SITE } from "./src/config";
+import { pluginLanguageBadge } from "./scripts/expressive-code-plugin-language-badge";
 
 // https://astro.build/config
 export default defineConfig({
@@ -24,7 +25,11 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     astroExpressiveCode({
-      plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
+      plugins: [
+        pluginCollapsibleSections(),
+        pluginLineNumbers(),
+        pluginLanguageBadge(),
+      ],
       themeCssSelector: (theme) => `[code-data-theme='${theme.name}']`,
       themes: ["github-dark", "github-light"],
       defaultProps: {

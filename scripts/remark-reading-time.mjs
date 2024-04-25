@@ -7,6 +7,8 @@ export function remarkReadingTime() {
     const readingTime = getReadingTime(textOnPage);
     // readingTime.text nos dará el tiempo de lectura en minutos como un  string legible,
     // p. ej. "3 min read"
-    data.astro.frontmatter.minutesRead = readingTime.text.replace("min", "mins").replace("read", "");
+    data.astro.frontmatter.minutesRead = readingTime.text
+      .replace("min", "mins")
+      .replace("read", "");
   };
 }
