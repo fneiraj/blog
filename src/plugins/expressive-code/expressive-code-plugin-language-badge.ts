@@ -1,8 +1,9 @@
 // @ts-check
 import { setProperty } from "@expressive-code/core/hast";
+import type { ExpressiveCodePlugin } from "@expressive-code/core";
 
 /** @returns {import('@expressive-code/core').ExpressiveCodePlugin} */
-export function pluginLanguageBadge() {
+export function pluginLanguageBadge(): ExpressiveCodePlugin {
   return {
     name: "Language Badge",
     baseStyles: ({ cssVar }) => `

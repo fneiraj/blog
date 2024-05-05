@@ -12,7 +12,7 @@ import remarkCollapse from "remark-collapse";
 import rehypeExternalLinks from "rehype-external-links";
 import { remarkReadingTime } from "./scripts/remark-reading-time.mjs";
 import { SITE } from "./src/config";
-import { pluginLanguageBadge } from "./scripts/expressive-code-plugin-language-badge";
+import { pluginLanguageBadge } from "./src/plugins/expressive-code/expressive-code-plugin-language-badge";
 
 // https://astro.build/config
 export default defineConfig({
@@ -78,6 +78,6 @@ export default defineConfig({
       exclude: ["@resvg/resvg-js"],
     },
   },
-  trailingSlash: "never",
+  //  trailingSlash: "never",
   scopedStyleStrategy: "where",
 });
