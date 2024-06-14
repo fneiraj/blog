@@ -47,7 +47,7 @@ function reflectPreference() {
     "code-data-theme",
     themeValue === "dark" ? "dark" : "github-light",
   );
-  changeGiscusTheme();
+  //  changeGiscusTheme();
 
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 

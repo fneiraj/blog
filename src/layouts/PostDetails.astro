@@ -6,7 +6,7 @@ import Toc from "@components/toc/Toc.astro";
 import Header from "@components/posts/Header.astro";
 import MainContent from "@components/posts/MainContent.astro";
 import Footer from "@components/posts/Footer.astro";
-import Giscus from "@components/posts/Giscus.tsx";
+//import Giscus from "@components/posts/Giscus.tsx";
 import RelatedPosts from "@components/posts/RelatedPosts.astro";
 import ScrollTopAndComments from "@components/posts/ScrollTopAndComments.astro";
 import { slugifyStr } from "@utils/slugify";
@@ -72,7 +72,7 @@ const date = pubDatetime;
           >
             <MainContent {Content} />
             {relatedPosts && <RelatedPosts {relatedPosts} />}
-            <Giscus client:only />
+            {/*<Giscus client:only />*/}
             <Footer {nextPost} {prevPost} />
           </div>
         </div>
