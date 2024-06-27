@@ -1,0 +1,93 @@
+---
+import HorizontalRadio from "@components/form/HorizontalRadio.astro";
+import Input from "@components/form/Input.astro";
+import SmallToggle from "@components/form/SmallToggle.astro";
+import Layout from "@layouts/Layout.astro";
+---
+
+<Layout>
+  <div>
+    <form id="create-project-form" class="max-w-sm mx-auto">
+      <Input id="project-name" text="Project name" />
+      <HorizontalRadio
+        radioId="package-manager"
+        label="Package manager"
+        options={[
+          { id: "npm", label: "NPM" },
+          { id: "yarn", label: "Yarn" },
+          { id: "pnpm", label: "PNPM" },
+        ]}
+      />
+      <SmallToggle id="init-git" text="Initialize Git repository" />
+
+      <div class="items-center w-full text-sm font-medium mb-5">
+        <label
+          for="language"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >Language</label
+        >
+        <select
+          id="language"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          <option selected>Choose a language</option>
+          <option value="ts">Typescript</option>
+          <option value="js">Javascript</option>
+        </select>
+      </div>
+      <div class="items-center w-full text-sm font-medium mb-5 text-center">
+        <button
+          type="submit"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >Create Project</button
+        >
+      </div>
+    </form>
+  </div>
+</Layout>
+
+<script>
+  const form = document.querySelector("#create-project-form");
+  const $projectName = document.querySelector(
+    "#project-name",
+  ) as HTMLInputElement;
+  const $packageManager = document.getElementsByName(
+    "package-manager",
+  ) as NodeListOf<HTMLInputElement>;
+  const $initGit = document.querySelector("#init-git") as HTMLInputElement;
+  const $language = document.querySelector("#language") as HTMLSelectElement;
+
+  async function postData(url = "", data = {}) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = {
+      projectName: $projectName.value,
+      packageManager: Array.from($packageManager).find((el) => el.checked)
+        .value,
+      initGit: $initGit.checked,
+      language: $language.value,
+    };
+    console.log(data);
+    postData("http://localhost:3000/generate-project", data)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = data.projectName + ".zip";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+  });
+</script>
