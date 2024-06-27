@@ -78,7 +78,7 @@ import Layout from "@layouts/Layout.astro";
       language: $language.value,
     };
     console.log(data);
-    postData("https://test.fneira.dev/generate-project", data)
+    postData("https://scaffolding-generator.fneira.dev/generate-project", data)
       .then((response) => response.blob())
       .then((blob) => {
         const url = window.URL.createObjectURL(blob);
