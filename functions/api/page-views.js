@@ -1,32 +1,20 @@
-export const onRequestPut = async (context) => {
-  const {
-    request,
-    env: { BLOG_INFO },
-  } = context;
-
-  // CF way to access the body of the put request
-  const { path } = await request.json();
-
-  let currentCount = Number(
-    await BLOG_INFO.get(path.replace("/api/views", "")),
-  );
-  if (!currentCount || isNaN(currentCount)) {
-    currentCount = 0;
-  }
-
-  // KV store does not allows "Number" as value
-  await BLOG_INFO.put(path, String(currentCount + 1));
-
-  return new Response(null, {
-    status: 204,
-    statusText: "ok",
-  });
-};
-
 export const onRequestGet = async (context) => {
   const { request, env } = context;
-  const url = new URL(request.url);
-  const path = url.pathname;
+  const encodedPath = new URL(request.url).searchParams.get("path");
+
+  if (!encodedPath) {
+    return new Response(
+      JSON.stringify({
+        error: "Path not provided",
+      }),
+      {
+        status: 404,
+      },
+    );
+  }
+
+  const path = decodeURIComponent(encodedPath);
+
   const rayID = request.headers.get("CF-RAY");
   const ip = request.headers.get("CF-CONNECTING-IP");
   const ua = request.headers.get("user-agent");
