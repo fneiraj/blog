@@ -55,7 +55,12 @@ export const onRequestGet = async (context) => {
     );
 
     const counter = await env.PAGE_COUNTER.get(path);
-    response = new Response(JSON.stringify({ pv: counter }));
+
+    if (counter === null) {
+      await env.PAGE_COUNTER.put(path, 1);
+    }
+
+    response = new Response(JSON.stringify({ path, views: counter ?? 1 }));
   } else {
     var html = `<!DOCTYPE html><html><head><meta name="robots" content="noindex"></head><body></body></html>`;
     response = new Response(html, {
