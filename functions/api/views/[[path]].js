@@ -58,6 +58,8 @@ export const onRequestGet = async (context) => {
 
     if (counter === null) {
       await env.PAGE_COUNTER.put(path, 1);
+    } else {
+      await env.PAGE_COUNTER.put(path, Number(counter) + 1);
     }
 
     response = new Response(JSON.stringify({ path, views: counter ?? 1 }));
