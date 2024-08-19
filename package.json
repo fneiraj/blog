@@ -3,7 +3,7 @@
   "version": "4.2.0",
   "private": false,
   "scripts": {
-    "dev": "wrangler pages dev --proxy 3000 --kv blog -- astro dev",
+    "dev": "wrangler pages dev --proxy 3000 --kv PAGE_COUNTER PAGE_VIEW_RECORDS -- astro dev",
     "start": "astro dev",
     "build": "astro build && jampack ./dist",
     "preview": "astro preview",
