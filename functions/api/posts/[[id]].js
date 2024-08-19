@@ -6,6 +6,6 @@ export function onRequestGet(context) {
   }
 
   return Response.json({
-    ok: true,
+    views: Random.integer(0, 100),
   });
 }

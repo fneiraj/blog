@@ -123,4 +123,10 @@ const date = pubDatetime;
   };
 
   const { views } = await fetchPostInfo();
+
+  const viewsCount = document.getElementById("viewsCount");
+
+  if (viewsCount) {
+    viewsCount.textContent = `${views} views`;
+  }
 </script>
