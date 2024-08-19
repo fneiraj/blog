@@ -1,6 +1,3 @@
-import type { PagesFunction, KVNamespace } from "@cloudflare/workers-types";
-import { Response } from "@cloudflare/workers-types";
-
 const DEFAULT_HEADERS = {
   "Access-Control-Allow-Origin": "https://fneira.dev",
   "Access-Control-Allow-Methods": "GET",
@@ -18,12 +15,7 @@ function response({ data, status = 200, headers = {}, isRaw = false }) {
   });
 }
 
-interface Env {
-  PAGE_DATA: KVNamespace;
-  PAGE_VIEW_RECORDS: KVNamespace;
-}
-
-export const onRequestGet: PagesFunction<Env> = async (context) => {
+export const onRequestGet = async (context) => {
   const { request, env } = context;
   const encodedPath = new URL(request.url).searchParams.get("path");
 
@@ -51,7 +43,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     .replace(/:/g, "")
     .replace(".", "");
 
-  if (ua?.includes("bot")) {
+  if (ua.includes("bot")) {
     var html = `<!DOCTYPE html><html><head><meta name="robots" content="noindex"></head><body></body></html>`;
     return response({
       data: html,
@@ -63,10 +55,10 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   }
 
   await env.PAGE_VIEW_RECORDS.put(
-    rayID ?? "unknown" + time,
+    rayID,
     JSON.stringify({
       path: path,
-      country: request.cf?.country,
+      country: request.cf.country,
       time: time,
       "cf-ray": rayID,
       ip: ip,
@@ -74,24 +66,18 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     }),
   );
 
-  const data = (await env.PAGE_DATA.get(path)) as any;
+  const data = await env.PAGE_DATA.get(path);
 
   if (data === null) {
-    await env.PAGE_DATA.put(
-      path,
-      JSON.stringify({
-        views: 1,
-        lastView: new Date(Date.now()),
-      }),
-    );
+    await env.PAGE_DATA.put(path, {
+      views: 1,
+      lastView: new Date(Date.now()),
+    });
   } else {
-    await env.PAGE_DATA.put(
-      path,
-      JSON.stringify({
-        views: Number(data.views) + 1,
-        lastView: new Date(Date.now()),
-      }),
-    );
+    await env.PAGE_DATA.put(path, {
+      views: Number(data.views) + 1,
+      lastView: new Date(Date.now()),
+    });
   }
 
   return response({
