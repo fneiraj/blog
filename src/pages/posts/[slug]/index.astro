@@ -35,7 +35,9 @@ const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 
 <script>
   const fetchPostInfo = async () => {
-    const encodedPath = encodeURIComponent(window.location.pathname);
+    const encodedPath = encodeURIComponent(
+      window.location.pathname.replace("/posts", ""),
+    );
 
     fetch(`/api/posts/${encodedPath}`)
       .then((res) => res.json())
