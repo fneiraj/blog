@@ -1,3 +1,9 @@
+const DEFAULT_HEADERS = {
+  "Access-Control-Allow-Origin": "https://fneira.dev",
+  "Access-Control-Allow-Methods": "GET",
+  "Access-Control-Max-Age": "86400",
+};
+
 export const onRequestGet = async (context) => {
   const { request, env } = context;
   const encodedPath = new URL(request.url).searchParams.get("path");
@@ -28,39 +34,42 @@ export const onRequestGet = async (context) => {
     .replace(/:/g, "")
     .replace(".", "");
 
-  var response;
-  if (!ua.includes("bot")) {
-    await env.PAGE_VIEW_RECORDS.put(
-      rayID,
-      JSON.stringify({
-        path: path,
-        country: request.cf.country,
-        time: time,
-        "cf-ray": rayID,
-        ip: ip,
-        "user-agent": ua,
-      }),
-    );
-
-    const counter = await env.PAGE_COUNTER.get(path);
-
-    if (counter === null) {
-      await env.PAGE_COUNTER.put(path, 1);
-    } else {
-      await env.PAGE_COUNTER.put(path, Number(counter) + 1);
-    }
-
-    response = new Response(JSON.stringify({ path, views: counter ?? 1 }));
-  } else {
+  if (ua.includes("bot")) {
     var html = `<!DOCTYPE html><html><head><meta name="robots" content="noindex"></head><body></body></html>`;
-    response = new Response(html, {
-      headers: { "Content-Type": "text/html;charset=utf-8" },
+    return new Response(html, {
+      headers: {
+        "Content-Type": "text/html;charset=utf-8",
+        ...DEFAULT_HEADERS,
+      },
     });
   }
 
-  response.headers.set("Access-Control-Allow-Origin", "https://fneira.dev");
-  response.headers.set("Access-Control-Allow-Methods", "GET");
-  response.headers.set("Access-Control-Max-Age", "86400");
+  await env.PAGE_VIEW_RECORDS.put(
+    rayID,
+    JSON.stringify({
+      path: path,
+      country: request.cf.country,
+      time: time,
+      "cf-ray": rayID,
+      ip: ip,
+      "user-agent": ua,
+    }),
+  );
+
+  const counter = await env.PAGE_COUNTER.get(path);
+
+  if (counter === null) {
+    await env.PAGE_COUNTER.put(path, 1);
+  } else {
+    await env.PAGE_COUNTER.put(path, Number(counter) + 1);
+  }
+
+  response = new Response(JSON.stringify({ path, views: counter ?? 1 }), {
+    headers: {
+      "Content-Type": "application/json",
+      ...DEFAULT_HEADERS,
+    },
+  });
 
   return response;
 };
