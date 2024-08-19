@@ -85,6 +85,9 @@ devDependencies:
   '@astrojs/tailwind':
     specifier: ^5.1.0
     version: 5.1.0(astro@4.14.2)(tailwindcss@3.4.10)
+  '@cloudflare/workers-types':
+    specifier: ^4.20240815.0
+    version: 4.20240815.0
   '@divriots/jampack':
     specifier: ^0.23.4
     version: 0.23.4(react-dom@16.14.0)(react@16.14.0)
@@ -153,7 +156,7 @@ devDependencies:
     version: 0.5.0
   wrangler:
     specifier: ^3.72.0
-    version: 3.72.0
+    version: 3.72.0(@cloudflare/workers-types@4.20240815.0)
 
 packages:
 
@@ -973,6 +976,10 @@ packages:
   /@cloudflare/workers-shared@0.2.0:
     resolution: {integrity: sha512-tIWLooWkBMuoKRk72lr6YrEtVlVdUTtAGVmPOnUroMrnri/9YLx+mVawL0/egDgSGmPbmvkdBFsUGRuI+aZmxg==}
     engines: {node: '>=16.7.0'}
+    dev: true
+
+  /@cloudflare/workers-types@4.20240815.0:
+    resolution: {integrity: sha512-H/IXCOahT1lr4RKzsiCkyjM7+LCPLtl2wjxyLG8xMTNERR0XuD1Vcfns6TraE0cd5+IcKe7j3rpzBlSCjZ+61A==}
     dev: true
 
   /@commitlint/config-validator@18.6.0:
@@ -9896,7 +9903,7 @@ packages:
       '@cloudflare/workerd-windows-64': 1.20240806.0
     dev: true
 
-  /wrangler@3.72.0:
+  /wrangler@3.72.0(@cloudflare/workers-types@4.20240815.0):
     resolution: {integrity: sha512-9sryHTCtCj48vUC5y/M3Dsx02U1bT6mK9E41TXBCpSJgWh8UvWG/xgmu2dY93Mqj9aJIvK/kwwIBRlNFRwF7Hw==}
     engines: {node: '>=16.17.0'}
     hasBin: true
@@ -9908,6 +9915,7 @@ packages:
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.4
       '@cloudflare/workers-shared': 0.2.0
+      '@cloudflare/workers-types': 4.20240815.0
       '@esbuild-plugins/node-globals-polyfill': 0.2.3(esbuild@0.17.19)
       '@esbuild-plugins/node-modules-polyfill': 0.2.2(esbuild@0.17.19)
       blake3-wasm: 2.1.5
