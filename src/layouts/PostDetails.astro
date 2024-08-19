@@ -114,19 +114,18 @@ const date = pubDatetime;
   }
   document.addEventListener("scroll", updateScrollProgress);
 
-  const fetchPostInfo = async () => {
+  async function fetchPostInfo() {
     const encodedPath = window.location.pathname.replace("/posts", "");
 
-    return await fetch(`/api/posts/${encodedPath}`)
+    const { views } = await fetch(`/api/posts/${encodedPath}`)
       .then((res) => res.json())
       .then((data) => data);
-  };
+    const viewsCount = document.getElementById("viewsCount");
 
-  const { views } = await fetchPostInfo();
-
-  const viewsCount = document.getElementById("viewsCount");
-
-  if (viewsCount) {
-    viewsCount.textContent = `${views} views`;
+    if (viewsCount) {
+      viewsCount.textContent = `${views} views`;
+    }
   }
+
+  fetchPostInfo();
 </script>
