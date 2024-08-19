@@ -117,7 +117,7 @@ const date = pubDatetime;
   async function fetchPostInfo() {
     const slug = window.location.pathname.replace("/posts/", "");
 
-    const { views } = await fetch(`/api/posts/${slug}`)
+    const { views } = await fetch(`/api/views/${slug}`)
       .then((res) => res.json())
       .then((data) => data);
     const viewsCount = document.getElementById("viewsCount");
