@@ -69,18 +69,30 @@ export const onRequestGet = async (context) => {
   const data = await env.PAGE_DATA.get(path);
 
   if (data === null) {
-    await env.PAGE_DATA.put(path, {
-      views: 1,
-      lastView: new Date(Date.now()),
-    });
-  } else {
-    await env.PAGE_DATA.put(path, {
-      views: Number(data.views) + 1,
-      lastView: new Date(Date.now()),
+    env.PAGE_DATA.put(
+      path,
+      JSON.stringify({
+        views: 1,
+        lastView: new Date(Date.now()),
+      }),
+    );
+
+    return response({
+      data: { path, views: data ?? 1 },
     });
   }
 
+  const dataParsed = JSON.parse(data);
+
+  env.PAGE_DATA.put(
+    path,
+    JSON.stringify({
+      views: Number(dataParsed.views) + 1,
+      lastView: new Date(Date.now()),
+    }),
+  );
+
   return response({
-    data: { path, views: data ?? 1 },
+    data: { path, views: dataParsed.views ?? 1 },
   });
 };
