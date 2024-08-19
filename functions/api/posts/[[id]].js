@@ -6,6 +6,6 @@ export function onRequestGet(context) {
   }
 
   return Response.json({
-    views: Random.integer(0, 100),
+    views: Math.floor(Math.random() * 100),
   });
 }

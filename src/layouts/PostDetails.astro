@@ -115,9 +115,9 @@ const date = pubDatetime;
   document.addEventListener("scroll", updateScrollProgress);
 
   async function fetchPostInfo() {
-    const encodedPath = window.location.pathname.replace("/posts", "");
+    const slug = window.location.pathname.replace("/posts/", "");
 
-    const { views } = await fetch(`/api/posts/${encodedPath}`)
+    const { views } = await fetch(`/api/posts/${slug}`)
       .then((res) => res.json())
       .then((data) => data);
     const viewsCount = document.getElementById("viewsCount");
