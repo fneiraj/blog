@@ -27,7 +27,7 @@ export default defineConfig({
       plugins: [
         pluginCollapsibleSections(),
         pluginLineNumbers(),
-        pluginLanguageBadge(),
+        //        pluginLanguageBadge(),
       ],
       themeCssSelector: (theme) => `[code-data-theme='${theme.name}']`,
       themes: ["github-dark", "github-light"],
