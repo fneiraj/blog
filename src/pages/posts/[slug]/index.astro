@@ -28,6 +28,18 @@ export async function getStaticPaths() {
   return [...postResult];
 }
 
+const fetchPostInfo = async () => {
+  const slug = Astro.params.slug;
+
+  fetch(`/api/posts/${slug}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+    });
+};
+
+fetchPostInfo();
+
 const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 ---
 
