@@ -32,17 +32,3 @@ const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 ---
 
 <PostDetails {post} {prevPost} {nextPost} {relatedPosts} />
-
-<script>
-  const fetchPostInfo = async () => {
-    const encodedPath = window.location.pathname.replace("/posts", "");
-
-    fetch(`/api/posts/${encodedPath}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      });
-  };
-
-  fetchPostInfo();
-</script>
