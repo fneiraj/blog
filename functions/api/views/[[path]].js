@@ -24,6 +24,7 @@ export const onRequestPut = async (context) => {
 };
 
 export const onRequestGet = async (context) => {
+  const { request, env } = context;
   const url = new URL(request.url);
   const path = url.pathname;
   const rayID = request.headers.get("CF-RAY");
