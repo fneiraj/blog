@@ -14,7 +14,7 @@ export const onRequestGet = async (context) => {
         error: "Path not provided",
       }),
       {
-        status: 404,
+        status: 400,
       },
     );
   }
@@ -64,12 +64,10 @@ export const onRequestGet = async (context) => {
     await env.PAGE_COUNTER.put(path, Number(counter) + 1);
   }
 
-  response = new Response(JSON.stringify({ path, views: counter ?? 1 }), {
+  return new Response(JSON.stringify({ path, views: counter ?? 1 }), {
     headers: {
       "Content-Type": "application/json",
       ...DEFAULT_HEADERS,
     },
   });
-
-  return response;
 };
