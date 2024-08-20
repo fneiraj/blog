@@ -96,6 +96,7 @@ const date = pubDatetime;
 
     document.body.appendChild(progressContainer);
   }
+
   createProgressBar();
 
   function updateScrollProgress() {
@@ -114,20 +115,22 @@ const date = pubDatetime;
   }
   document.addEventListener("scroll", updateScrollProgress);
 
-  document.addEventListener("astro:after-swap", () => {
-    async function fetchPostInfo() {
-      const encodedPath = encodeURIComponent(window.location.pathname);
+  async function fetchPostInfo() {
+    const encodedPath = encodeURIComponent(window.location.pathname);
 
-      const { views } = await fetch(`/api/page-views?path=${encodedPath}`)
-        .then((res) => res.json())
-        .then((data) => data);
-      const viewsCount = document.getElementById("viewsCount");
+    const { views } = await fetch(`/api/page-views?path=${encodedPath}`)
+      .then((res) => res.json())
+      .then((data) => data);
+    const viewsCount = document.getElementById("viewsCount");
 
-      if (viewsCount) {
-        viewsCount.textContent = `${views} views`;
-      }
+    if (viewsCount) {
+      viewsCount.textContent = `${views} views`;
     }
+  }
 
+  fetchPostInfo();
+
+  document.addEventListener("astro:after-swap", () => {
     fetchPostInfo();
   });
 </script>
