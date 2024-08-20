@@ -13,6 +13,7 @@ import rehypeExternalLinks from "rehype-external-links";
 import { remarkReadingTime } from "./scripts/remark-reading-time.mjs";
 import { SITE } from "./src/config";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/expressive-code-plugin-language-badge";
+import { customOpenButton } from "./src/plugins/expressive-code/expressive-code-plugin-open-in-button";
 
 // https://astro.build/config
 export default defineConfig({
@@ -27,7 +28,8 @@ export default defineConfig({
       plugins: [
         pluginCollapsibleSections(),
         pluginLineNumbers(),
-        //        pluginLanguageBadge(),
+        pluginLanguageBadge(),
+        //customOpenButton(),
       ],
       themeCssSelector: (theme) => `[code-data-theme='${theme.name}']`,
       themes: ["github-dark", "github-light"],

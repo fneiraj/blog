@@ -1,10 +1,7 @@
-// @ts-check
-import { setProperty } from "@expressive-code/core/hast";
-import type { ExpressiveCodePlugin } from "@expressive-code/core";
+import { definePlugin } from "@expressive-code/core";
 
-/** @returns {import('@expressive-code/core').ExpressiveCodePlugin} */
-export function pluginLanguageBadge(): ExpressiveCodePlugin {
-  return {
+export function pluginLanguageBadge() {
+  return definePlugin({
     name: "Language Badge",
     baseStyles: ({ cssVar }) => `
       [data-language]::before {
@@ -19,21 +16,25 @@ export function pluginLanguageBadge(): ExpressiveCodePlugin {
         text-transform: uppercase;
         color: white;
         background: rebeccapurple;
-        border-radius: inherit;
+        border-radius: ${cssVar("borderRadius")};
         pointer-events: none;
+        transition: opacity 0.2s;
       }
-      .frame:not(.has-title):not(.is-terminal):hover[data-language]::before {
-        display: none;
+      /* Prevent the language badge from overlapping the copy button */
+      .frame:not(.has-title):not(.is-terminal) {
+        /* If the copy button is always visible, move it to the side */
+        @media not (hover: hover) {
+          .copy {
+            margin-right: 3rem;
+          }
+        }
+        /* If it's only visible on hover, hide the language badge on hover */
+        @media (hover: hover) {
+          &:hover [data-language]::before {
+            opacity: 0;
+          }
+        }
       }
     `,
-    hooks: {
-      postprocessRenderedBlock: ({ codeBlock, renderData }) => {
-        setProperty(
-          renderData.blockAst,
-          "data-language",
-          codeBlock.language.toLowerCase(),
-        );
-      },
-    },
-  };
+  });
 }
